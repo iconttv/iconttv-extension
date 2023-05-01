@@ -1,7 +1,11 @@
 const { writeFileSync } = require('fs');
+
 const { VERSION, VERSION_NAME } = require('./src/version');
 
 const isFirefox = process.env.BROWSER_ENV === 'firefox';
+require('dotenv').config({
+  path: '.env.local'
+});
 
 function formManifest() {
   const manifest = {

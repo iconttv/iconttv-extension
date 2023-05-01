@@ -1,0 +1,255 @@
+/*
+ [] 태그 요소
+*/
+b .text-fragment {
+  font-weight: bold !important;
+}
+
+i .text-fragment {
+  font-style: italic !important;
+}
+
+strike .text-fragment {
+  text-decoration: line-through !important;
+}
+
+/*
+  새로 추가한 요소 css
+*/
+
+span.iconttv-newline {
+  /**
+  크게 (.icon), 작게 (.icon-small) 이미지가 담김.
+  한 줄에 하나의 이미지만 표현하도록 함.
+  */
+  display: block;
+}
+
+img.iconttv-large {
+  width: 100px;
+  height: 100px;
+}
+img.iconttv-medium {
+  width: 70px;
+  height: 70px;
+}
+img.iconttv-emoji {
+  width: 28px;
+  height: 28px;
+}
+
+img.iconttv-common[data-name^='볼트공중'] {
+  animation: rotation 0.5s infinite linear;
+}
+
+img.iconttv-common[data-name^='관짝'] {
+  animation: shake 0.5s infinite linear;
+}
+
+.iconttv-common:hover {
+  background: var(--color-background-interactable-alpha);
+  border-radius: var(--border-radius-medium);
+}
+
+div.iconttv-selector-root {
+  position: absolute;
+  width: auto;
+  height: fit-content;
+  max-height: 20vh;
+  visibility: hidden;
+  bottom: 100%;
+  margin: 0;
+  margin-bottom: 3.5px;
+}
+
+div.iconttv-selector-wrapper {
+  backdrop-filter: blur(1.5px) brightness(0.8);
+  background-color: var(--color-background-input);
+
+  border-radius: var(--border-radius-medium);
+  border-color: var(--color-border-input);
+  border-style: solid;
+  border-width: var(--border-width-input);
+  color: var(--color-text-input);
+  background-clip: padding-box;
+  transition: box-shadow var(--timing-short) ease-in,
+    border var(--timing-short) ease-in,
+    background-color var(--timing-short) ease-in;
+
+  width: 100%;
+  height: inherit;
+  max-height: inherit;
+  z-index: 100;
+  overflow: auto;
+}
+
+div.iconttv-selector-wrapper:hover {
+  background-color: var(--color-background-input-focus) !important;
+  border-color: var(--color-border-input-focus) !important;
+}
+
+div.iconttv-selector-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+div.iconttv-selector-wrapper::-webkit-scrollbar-thumb {
+  height: 20%;
+  border-radius: 8px;
+}
+
+.tw-root--theme-dark div.iconttv-selector-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.tw-root--theme-light div.iconttv-selector-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+div.iconttv-selector-wrapper::-webkit-scrollbar-track {
+  background: inherit;
+}
+
+div.iconttv-list {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+}
+
+img.iconttv-item {
+  margin: 5px;
+  border-right: 1px solid gray;
+  border-bottom: 1px solid gray;
+  border-radius: 1px;
+  width: 40px;
+  height: 40px;
+}
+
+img.iconttv-item:hover {
+  border: 1px white solid;
+  box-shadow: 0 0 10px 5px gray;
+  animation: enlarge 0.1s forwards;
+}
+
+img.selected {
+  border: 1px white solid;
+  box-shadow: 0 0 10px 5px gray;
+  animation: enlarge 0.1s forwards;
+}
+
+img.iconttv-selector-icon {
+  background-image: url('https://api.probius.dev/twitch-icons/cdn/icon?size=32');
+  background-size: contain;
+}
+
+/*
+tippy
+*/
+
+.tippy-box[data-theme~='twitch'] {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background-tooltip);
+}
+
+.tippy-box[data-theme~='twitch'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: var(--color-background-tooltip);
+}
+
+.tippy-arrow {
+  bottom: 0.3rem !important;
+}
+
+.tippy-content {
+  color: var(--color-text-tooltip);
+  padding: 0.5rem !important;
+  border-radius: 0.4rem !important;
+  font-size: var(--font-size-6) !important;
+  font-weight: var(--font-weight-semibold);
+}
+
+.hide {
+  animation: disappear 0.3s forwards;
+}
+
+.show {
+  animation: appear 0.3s forwards;
+}
+
+/*
+트위치 다크 모드
+*/
+
+/* 
+애니메이션
+*/
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+@keyframes disappear {
+  100% {
+    opacity: 0%;
+    visibility: hidden;
+  }
+}
+
+@keyframes appear {
+  100% {
+    opacity: 100%;
+    visibility: visible;
+  }
+}
+
+@keyframes enlarge {
+  from {
+    width: 40px;
+    height: 40px;
+  }
+  to {
+    width: 45px;
+    height: 45px;
+  }
+}

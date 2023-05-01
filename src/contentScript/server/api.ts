@@ -1,0 +1,56 @@
+import { ServerIconList } from '../../common/types';
+const VERSION = require('../../version.js');
+
+/**
+ * Icon backend server endpoint without trailing slash(`/`)
+ * currently using https://github.com/drowsy-probius/twitch-icon-cache
+ */
+const API_ENDPOINT = 'https://api.probius.dev/twitch-icons/cdn';
+
+
+function fetchWrapper(api: string, options?: RequestInit): Promise<Response> {
+  const userAgent = navigator.userAgent.toLowerCase();
+  const HEADERS = {
+    'User-Agent': `${userAgent} Iconttv/${VERSION}`
+  }
+  return fetch(api, {
+    ...options,
+    headers: HEADERS
+  })
+}
+
+
+export const emptyServerIconList = {
+  icons: [],
+  timestamp: 0,
+};
+
+export async function getIconList(streamerId: string): Promise<ServerIconList> {
+  const res = await fetchWrapper(`${API_ENDPOINT}/list/${streamerId}`);
+  if (res.status === 200) {
+    const iconList: ServerIconList = await res.json();
+    return iconList;
+  }
+  if (res.status === 404) {
+    /**
+     * unenrolled streamer
+     */
+    return emptyServerIconList;
+  }
+  throw new Error(
+    `Unexpected API call Error: [${res.status}] ${await res.text()}`
+  );
+}
+
+export function getIconUrl(urlpath: string): string {
+  if (urlpath.startsWith('http://') || urlpath.startsWith('https://')) {
+    return urlpath;
+  }
+  if (urlpath.startsWith('./')) {
+    return `${API_ENDPOINT}/${urlpath.slice(2)}`;
+  }
+  if (urlpath.startsWith('/')) {
+    return `${API_ENDPOINT}/${urlpath.slice(1)}`;
+  }
+  return `${API_ENDPOINT}/${urlpath}`;
+}

@@ -218,7 +218,10 @@ export async function replaceTextToElements(
                 TWITCH_SELECTORS.chatScroll
               );
               if (!scrollBar) return;
-              const scrollDiff = scrollBar.scrollHeight - scrollBar.scrollTop - scrollBar.clientHeight;
+              const scrollDiff =
+                scrollBar.scrollHeight -
+                scrollBar.scrollTop -
+                scrollBar.clientHeight;
               const iconHeight = (this as HTMLImageElement).height ?? 0;
               Logger.log(scrollDiff, iconHeight);
               if (scrollDiff <= iconHeight) {

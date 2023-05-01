@@ -1,5 +1,5 @@
 const { writeFileSync } = require('fs');
-const VERSION = require('./src/version');
+const { VERSION, VERSION_NAME } = require('./src/version');
 
 const isFirefox = process.env.BROWSER_ENV === 'firefox';
 
@@ -8,6 +8,7 @@ function formManifest() {
     manifest_version: 3,
     name: 'iconttv',
     version: VERSION,
+    version_name: VERSION_NAME,
     description: 'iconttv Official Extension',
     icons: {
       16: 'icons/16.icon.png',

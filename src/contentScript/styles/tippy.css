@@ -1,0 +1,30 @@
+.tippy-box[data-theme~='twitch'] {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background-tooltip);
+  border-radius: 0.4rem !important;
+}
+
+.tippy-box[data-theme~='twitch'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: var(--color-background-tooltip);
+}
+
+.tippy-arrow {
+  bottom: 0.3rem !important;
+}
+
+.tippy-content {
+  color: var(--color-text-tooltip);
+  padding: 0.5rem !important;
+  border-radius: 0.4rem !important;
+  font-size: var(--font-size-6) !important;
+  font-weight: var(--font-weight-semibold);
+}
+
+.hide {
+  animation: disappear 0.3s forwards;
+}
+
+.show {
+  animation: appear 0.3s forwards;
+}

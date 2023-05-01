@@ -7,18 +7,16 @@ const VERSION = require('../../version.js');
  */
 const API_ENDPOINT = 'https://api.probius.dev/twitch-icons/cdn';
 
-
 function fetchWrapper(api: string, options?: RequestInit): Promise<Response> {
   const userAgent = navigator.userAgent.toLowerCase();
   const HEADERS = {
-    'User-Agent': `${userAgent} Iconttv/${VERSION}`
-  }
+    'User-Agent': `${userAgent} Iconttv/${VERSION}`,
+  };
   return fetch(api, {
     ...options,
-    headers: HEADERS
-  })
+    headers: HEADERS,
+  });
 }
-
 
 export const emptyServerIconList = {
   icons: [],
@@ -27,19 +25,11 @@ export const emptyServerIconList = {
 
 export async function getIconList(streamerId: string): Promise<ServerIconList> {
   const res = await fetchWrapper(`${API_ENDPOINT}/list/${streamerId}`);
-  if (res.status === 200) {
-    const iconList: ServerIconList = await res.json();
-    return iconList;
+  const resJson = await res.json();
+  if (res.status !== 200) {
+    throw new Error(`[${res.status}] ${JSON.stringify(resJson)}`);
   }
-  if (res.status === 404) {
-    /**
-     * unenrolled streamer
-     */
-    return emptyServerIconList;
-  }
-  throw new Error(
-    `Unexpected API call Error: [${res.status}] ${await res.text()}`
-  );
+  return resJson;
 }
 
 export function getIconUrl(urlpath: string): string {

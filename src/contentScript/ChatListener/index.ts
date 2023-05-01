@@ -8,9 +8,10 @@ import { applyIconToElement } from './iconApply';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 import { icon2element } from './iconApply';
 import { CLASSNAMES } from '../utils/classNames';
+import ChatInputListener from '../ChatInputListener';
 
 export const ChatListenerEventTypes = {
-  CHANGE_URL: 'change_url',
+  CHANGE_STREAMER_ID: 'change_streamerId',
   NEW_CHAT: 'new_chat',
 };
 
@@ -25,23 +26,31 @@ class ChatListener extends SafeEventEmitter {
     if (ChatListener.#instance) return ChatListener.#instance;
     ChatListener.#instance = this;
 
-    this.on(ChatListenerEventTypes.CHANGE_URL, this.changeUrlHandler);
+    this.on(
+      ChatListenerEventTypes.CHANGE_STREAMER_ID,
+      this.changeStreamerIdHandler
+    );
     this.on(ChatListenerEventTypes.NEW_CHAT, this.newChatHandler);
   }
 
-  async changeUrlHandler(href: string) {
-    const streamerId = getStreamerId(href);
+  async changeStreamerIdHandler() {
+    let streamerId = getStreamerId(window.location.href);
+    // if (streamerId === '')
+    //   streamerId = ChatInputListener.getStreamerName();
+
+    /** For debugging */
+    if (streamerId === 'drowsyprobius') streamerId = 'funzinnu';
+
     if (this.streamerId === streamerId) return;
     this.streamerId = streamerId;
 
-    /** For debugging */
-    if (this.streamerId === 'drowsyprobius') this.streamerId = 'funzinnu';
+    Logger.debug(`Current Watching Streamer: ${this.streamerId}`);
 
     try {
-      let start = Date.now();
       const serverIconList = await getIconList(this.streamerId);
-      start = Date.now();
       const keyword2icon = icon2element(serverIconList.icons);
+
+      Logger.debug(`Processing ${this.streamerId}'s icons...`);
 
       LocalStorage.cache.set(
         STORAGE_KEY.CACHE.SERVER_ICON_LIST,
@@ -49,8 +58,8 @@ class ChatListener extends SafeEventEmitter {
       );
       LocalStorage.cache.set(STORAGE_KEY.CACHE.KEYWORD2ICON, keyword2icon);
     } catch (e) {
-      Logger.error(e);
-      Logger.trace(e);
+      Logger.debug(`${this.streamerId}'s icon does not exists.`);
+      // Logger.debug(e);
     }
   }
 
@@ -65,8 +74,6 @@ class ChatListener extends SafeEventEmitter {
     const convertedBody = await applyIconToElement(chatBody);
     chatBody.replaceWith(convertedBody);
     // Logger.debug(`icon replacement takes ${Date.now() - start} ms`);
-
-    // TODO: chat scroll by one pic size
   }
 }
 

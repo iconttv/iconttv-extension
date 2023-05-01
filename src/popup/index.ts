@@ -1,3 +1,3 @@
-'use strict';
+import Logger from '../Logger';
 
-import '../Logger';
+Logger.debug('hello?')

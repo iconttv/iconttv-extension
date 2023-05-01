@@ -6,19 +6,19 @@ const isFirefox = process.env.BROWSER_ENV === 'firefox';
 function formManifest() {
   const manifest = {
     manifest_version: 3,
-    name: 'Iconttv',
+    name: 'iconttv',
     version: VERSION,
-    description: 'Iconttv Official Extension',
+    description: 'iconttv Official Extension',
     icons: {
       16: 'icons/16.icon.png',
       32: 'icons/32.icon.png',
       48: 'icons/48.icon.png',
       128: 'icons/128.icon.png',
     },
-    action: {
-      default_title: 'Iconttv',
-      default_popup: 'popup.html',
-    },
+    // action: {
+    //   default_title: 'Iconttv',
+    //   default_popup: 'popup.html',
+    // },
     permissions: ['storage'],
     content_scripts: [
       {
@@ -27,12 +27,6 @@ function formManifest() {
         js: ['contentScript.js'],
         css: ['contentScript.css'],
         world: 'MAIN',
-      },
-    ],
-    web_accessible_resources: [
-      {
-        resources: ['inject.js'],
-        matches: ['*://*.twitch.tv/*'],
       },
     ],
   };

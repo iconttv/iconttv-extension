@@ -17,8 +17,7 @@ class ChatInputListener {
 
   __getReactInstance(selector: string) {
     const element = document.querySelector(selector);
-    if (!element)
-      return null;
+    if (!element) return null;
 
     for (const key in element) {
       if (key.startsWith('__reactInternalInstance')) {
@@ -34,8 +33,7 @@ class ChatInputListener {
     maxDepth = 20
   ) {
     let reactInstance = this.__getReactInstance(selector);
-    if (!reactInstance)
-      return null;
+    if (!reactInstance) return null;
 
     let depth = 0;
     while (depth < maxDepth) {
@@ -49,10 +47,8 @@ class ChatInputListener {
   }
 
   __getInputComponent() {
-    if (this.inputComponent)
-      return this.inputComponent;
-    if (!window.iconttv)
-      return null;
+    if (this.inputComponent) return this.inputComponent;
+    if (!window.iconttv) return null;
 
     this.inputComponent = this.__getReactComponent(
       TWITCH_SELECTORS.chatInput,
@@ -66,10 +62,8 @@ class ChatInputListener {
   }
 
   __getEditorComponent() {
-    if (this.editorComponent)
-      return this.editorComponent;
-    if (!window.iconttv)
-      return null;
+    if (this.editorComponent) return this.editorComponent;
+    if (!window.iconttv) return null;
 
     this.editorComponent = this.__getReactComponent(
       TWITCH_SELECTORS.chatInput,
@@ -79,18 +73,26 @@ class ChatInputListener {
     return this.editorComponent;
   }
 
+  /**
+   * 일단 버그가 많음.
+   */
+  // getStreamerName(): string {
+  //   const editorComponent = this.__getEditorComponent();
+  //   if (!editorComponent) return '';
+
+  //   return editorComponent.props.channelLogin ?? '';
+  // }
+
   getInputValue(): string {
     const inputComponent = this.__getInputComponent();
-    if (!inputComponent)
-      return '';
+    if (!inputComponent) return '';
 
     return this.inputComponent.memoizedProps.value;
   }
 
   setInputValue(text: string, setFocus: boolean) {
     const inputComponent = this.__getInputComponent();
-    if (!inputComponent)
-      return;
+    if (!inputComponent) return;
 
     const nextText = `${inputComponent.memoizedProps.value} ${text} `;
 
@@ -98,8 +100,7 @@ class ChatInputListener {
     inputComponent.memoizedProps.setInputValue(nextText);
     inputComponent.memoizedProps.onValueUpdate(nextText);
 
-    if (setFocus)
-      this.setFocus(nextText.length);
+    if (setFocus) this.setFocus(nextText.length);
   }
 
   setFocus(textLength: number) {

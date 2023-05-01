@@ -80,7 +80,6 @@ function elementWrapper(
   type: ElementWarpperType
 ): Element {
   const parent = document.createElement(type === 'text' ? 'span' : 'div');
-  parent.classList.add(CLASSNAMES.NEWLINE);
   parent.append(element);
 
   switch (type) {
@@ -91,14 +90,17 @@ function elementWrapper(
     }
     case 'small': {
       (element as Element).classList.add(CLASSNAMES.ICON.SMALL);
+      parent.classList.add(CLASSNAMES.NEWLINE);
       break;
     }
     case 'medium': {
       (element as Element).classList.add(CLASSNAMES.ICON.MEDIUM);
+      parent.classList.add(CLASSNAMES.NEWLINE);
       break;
     }
     case 'large': {
       (element as Element).classList.add(CLASSNAMES.ICON.LARGE);
+      parent.classList.add(CLASSNAMES.NEWLINE);
       break;
     }
   }
@@ -211,6 +213,18 @@ export async function replaceTextToElements(
             image.onmouseout = function () {
               (image as any)._tippy && (image as any)._tippy.destroy();
             };
+            image.onload = function () {
+              const scrollBar = document.querySelector(
+                TWITCH_SELECTORS.chatScroll
+              );
+              if (!scrollBar) return;
+              const scrollDiff = scrollBar.scrollHeight - scrollBar.scrollTop - scrollBar.clientHeight;
+              const iconHeight = (this as HTMLImageElement).height ?? 0;
+              Logger.log(scrollDiff, iconHeight);
+              if (scrollDiff <= iconHeight) {
+                scrollBar.scrollTop += iconHeight;
+              }
+            };
 
             if (iconSizeOption !== 'small') isReplaced = true;
             children.push(elementWrapper(image, iconSizeOption));
@@ -239,8 +253,12 @@ export async function replaceTextToElements(
   }
 
   try {
-    const replaceTagOption = LocalStorage.browser.get(STORAGE_KEY.BROWSER.REPLACE_TAG) as boolean;
-    const iconSizeOption = LocalStorage.browser.get(STORAGE_KEY.BROWSER.ICON_SIZE) as IconSize;
+    const replaceTagOption = LocalStorage.browser.get(
+      STORAGE_KEY.BROWSER.REPLACE_TAG
+    ) as boolean;
+    const iconSizeOption = LocalStorage.browser.get(
+      STORAGE_KEY.BROWSER.ICON_SIZE
+    ) as IconSize;
 
     return replaceTagOption
       ? replaceTags(replaceStyleTags(escapeHTMLTags(innerText)), iconSizeOption)

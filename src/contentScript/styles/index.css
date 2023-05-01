@@ -42,9 +42,9 @@ img.iconttv-common[data-name^='볼트공중'] {
   animation: rotation 0.5s infinite linear;
 }
 
-img.iconttv-common[data-name^='관짝'] {
+/* img.iconttv-common[data-name^='관짝'] {
   animation: shake 0.5s infinite linear;
-}
+} */
 
 .iconttv-common:hover {
   background: var(--color-background-interactable-alpha);
@@ -140,44 +140,6 @@ img.iconttv-selector-icon {
   background-image: url('https://api.probius.dev/twitch-icons/cdn/icon?size=32');
   background-size: contain;
 }
-
-/*
-tippy
-*/
-
-.tippy-box[data-theme~='twitch'] {
-  margin: 0;
-  padding: 0;
-  background-color: var(--color-background-tooltip);
-}
-
-.tippy-box[data-theme~='twitch'][data-placement^='top'] > .tippy-arrow::before {
-  border-top-color: var(--color-background-tooltip);
-}
-
-.tippy-arrow {
-  bottom: 0.3rem !important;
-}
-
-.tippy-content {
-  color: var(--color-text-tooltip);
-  padding: 0.5rem !important;
-  border-radius: 0.4rem !important;
-  font-size: var(--font-size-6) !important;
-  font-weight: var(--font-weight-semibold);
-}
-
-.hide {
-  animation: disappear 0.3s forwards;
-}
-
-.show {
-  animation: appear 0.3s forwards;
-}
-
-/*
-트위치 다크 모드
-*/
 
 /* 
 애니메이션

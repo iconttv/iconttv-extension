@@ -77,8 +77,7 @@ class LocalStorage {
     this.browser = {
       get: (key) => {
         const storage = JSON.parse(this.browserStorage[this.browserKey]);
-        if (key in storage)
-          return storage[key];
+        if (key in storage) return storage[key];
         return;
       },
 

@@ -26,7 +26,7 @@ export function getStreamerId(href: string): string {
       /**
        * https://www.twitch.tv/popout/streamer/chat
        */
-      return href.split('/').slice(-2)[0];
+      return href.split('/').slice(-2)[0] ?? '';
     }
     case 'live': {
       /**

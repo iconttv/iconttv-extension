@@ -1,7 +1,9 @@
 'use strict';
 
 import Iconttv from './Iconttv';
-import './style.css';
+
+import './styles/index.css';
+import './styles/tippy.css';
 
 (async (window) => {
   if (
@@ -15,6 +17,7 @@ import './style.css';
     return;
   if (window.frameElement !== null) return;
   if (window.__iconttv) return;
+
   window.__iconttv = true;
   window.iconttv = new Iconttv();
 })(window);

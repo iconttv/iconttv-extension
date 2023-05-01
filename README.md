@@ -4,16 +4,23 @@ Iconttv browser extension source code
 
 구 twitch-icon-selector
 
+## alpha-stage features
+
+- 이미지 렌더링 및 태그 변환 수행
+- `70px * 70px`사이즈만 렌더링
+- 팝업 페이지 및 설정 페이지 없음.
+
 ## Features
 
 - 트위치 생방송, 트위치 다시보기, popout 채팅창, 클립 페이지에서 작동
 - 페이지 이동 시에도 끊김 없이 동작
 - 버튼 클릭 시 아이콘 목록 보기
 - 채팅창에 `~` 입력 시 아이콘 목록 검색 가능
-- 아이콘 목록에서 `←`, `→`으로 탐색, `↓`으로 입력. (커서가 입력의 끝이 아닐 때는 남은 문자열을 클립보드에 복사함) 
+- 아이콘 목록에서 `←`, `→`으로 탐색, `↓`으로 입력. (커서가 입력의 끝이 아닐 때는 남은 문자열을 클립보드에 복사함)
 - 아이콘 목록에서 클릭시 입력창에 붙여넣기 또는 클립보드에 복사
 - 채팅창에서 아이콘 클릭 시 입력창에 붙여넣기 또는 클립보드에 복사
-- 일부 스트리머에 한해서 `[]` 명령어를 지원합니다. 
+- 일부 스트리머에 한해서 `[]` 명령어를 지원합니다.
+
 ```
 [b]굵은글씨
 [i]기울어짐
@@ -26,8 +33,6 @@ __밑줄글씨__
 [br]줄바꿈
 [mq]흘러갈말[/mq]
 ```
-
-
 
 ![채팅창 데모](./imgs/demo_chat.gif)
 
@@ -43,10 +48,9 @@ Icons by svgrepo.com
 
 ## Install
 
-[**Chromium** extension]() 
+[**Chromium** extension]()
 
 [**Firefox** extension]()
-
 
 # Development
 
@@ -54,7 +58,7 @@ Icons by svgrepo.com
 
 Configuration with `.env.local` file should be done before running the app.
 
-- About: 
+- About:
   - `FIREFOX_ADDON_ID` Value for Firefox Addon build.
 
 ## Contribution
@@ -64,4 +68,3 @@ Suggestions and pull requests are welcomed!.
 ---
 
 This project was bootstrapped with [Chrome Extension CLI](https://github.com/dutiyesh/chrome-extension-cli)
-

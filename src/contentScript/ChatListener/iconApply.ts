@@ -3,7 +3,7 @@ import { Icon, IconSize, Keyword2Icon } from '../../common/types';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 import { CLASSNAMES } from '../utils/classNames';
 import TWITCH_SELECTORS from '../utils/selectors';
-import { escapeHTMLTags, replaceStyleTags } from '../utils/tags';
+import { escapeHTMLTags, replaceStyleTags } from './tagsApply';
 import { matchIconElement } from './iconSearch';
 import tippy from 'tippy.js';
 import { getIconUrl } from '../server/api';

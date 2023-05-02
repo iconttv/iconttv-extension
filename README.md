@@ -4,6 +4,14 @@ Iconttv browser extension source code
 
 구 twitch-icon-selector
 
+
+## Install
+
+[**Chromium** extension](https://chrome.google.com/webstore/detail/iconttv/jgpcibjnfdgbllfghmaamafafgkadhpf)
+
+[**Firefox** extension](https://addons.mozilla.org/en-US/firefox/addon/%ED%8A%B8%EC%9C%84%EC%B9%98-%EC%BB%A4%EC%8A%A4%ED%85%80-%EC%95%84%EC%9D%B4%EC%BD%98-%EC%84%A0%ED%83%9D%EA%B8%B0/)
+
+
 ## alpha-stage features
 
 - 이미지 렌더링 및 태그 변환 수행
@@ -45,12 +53,6 @@ __밑줄글씨__
 Funzinnu
 
 Icons by svgrepo.com
-
-## Install
-
-[**Chromium** extension]()
-
-[**Firefox** extension]()
 
 # Development
 

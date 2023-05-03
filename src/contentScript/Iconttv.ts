@@ -4,6 +4,7 @@ import Observer from './Observer';
 import ChatListener, { ChatListenerEventTypes } from './ChatListener';
 import ChatInputListener from './ChatInputListener';
 import { getStreamerId } from './utils/streamerId';
+import { injectSettings } from './components/Settings';
 
 class Iconttv {
   static #instance: Iconttv;
@@ -22,6 +23,10 @@ class Iconttv {
     Observer.on(TWITCH_SELECTORS.chatInputEditor, () => {
       ChatListener.emit(ChatListenerEventTypes.CHANGE_STREAMER_ID);
     });
+
+    Observer.on(TWITCH_SELECTORS.chatSettingContainer, (node) => {
+      injectSettings(node as Element);
+    })
 
     Logger.log('loaded');
   }

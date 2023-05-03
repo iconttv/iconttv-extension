@@ -28,9 +28,9 @@ const common = {
   },
   module: {
     rules: [
-      // Check for TypeScript files
+      // Check for TypeScript and React components files
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         use: ['ts-loader'],
       },
       // Help webpack in understanding CSS files imported in .js files
@@ -55,7 +55,7 @@ const common = {
   },
   resolve: {
     // Help webpack resolve these extensions in order
-    extensions: ['.ts', '.js', '.css'],
+    extensions: ['.ts', '.js', '.tsx', '.css'],
   },
   plugins: [
     // Copy static assets from `public` folder to `build` folder

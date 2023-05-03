@@ -7,8 +7,13 @@ const TWITCH_SELECTORS = {
 
   chatInputEditor: `.chat-wysiwyg-input__editor`,
 
-  documentHead: 'head',
+  chatButtonContainer: `[data-test-selector="chat-input-buttons-container"]`,
+  chatSettingButton: `[data-a-target="chat-settings"]`,
+  chatSettingContainer: `[data-a-target="chat-settings-balloon"] [data-a-target="chat-settings-mod-view"]`,
+  chatSettingContainerSeperator: `[role="separator"]`,
+
   // documentTitle: 'title',
+  // documentHead: 'head',
 
   // chatInputText: `[data-a-target="chat-input-text"]`,
 

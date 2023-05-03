@@ -4,7 +4,7 @@ const { VERSION, VERSION_NAME } = require('./src/version');
 
 const isFirefox = process.env.BROWSER_ENV === 'firefox';
 require('dotenv').config({
-  path: '.env.local'
+  path: '.env.local',
 });
 
 function formManifest() {
@@ -20,10 +20,10 @@ function formManifest() {
       48: 'icons/48.icon.png',
       128: 'icons/128.icon.png',
     },
-    // action: {
-    //   default_title: 'Iconttv',
-    //   default_popup: 'popup.html',
-    // },
+    action: {
+      default_title: 'Iconttv',
+      default_popup: 'popup.html',
+    },
     permissions: ['storage'],
     content_scripts: [
       {

@@ -1,9 +1,9 @@
-import TWITCH_SELECTORS from "../utils/selectors";
+import TWITCH_SELECTORS from '../utils/selectors';
 
 interface Setting {
   name: string;
   options: string | boolean | number;
-} 
+}
 const settings: Setting[] = [
   {
     name: '아이콘 크기',
@@ -12,16 +12,17 @@ const settings: Setting[] = [
   {
     name: '태그 명령어 사용',
     options: true,
-  }
-]
+  },
+];
 
 export function insertSetting() {
-  const container = document.querySelector(TWITCH_SELECTORS.chatSettingContainer);
+  const container = document.querySelector(
+    TWITCH_SELECTORS.chatSettingContainer
+  );
   if (!container) return;
 
-  const seperator = container.querySelector(TWITCH_SELECTORS.chatSettingContainerSeperator);
+  const seperator = container.querySelector(
+    TWITCH_SELECTORS.chatSettingContainerSeperator
+  );
   const settingContainerClassName = container.className;
-
-
-  
 }

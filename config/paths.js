@@ -6,7 +6,7 @@ const srcPath = path.resolve(__dirname, '../src');
 
 const PATHS = {
   src: {
-    // popup: path.join(srcPath, 'popup'),
+    popup: path.join(srcPath, 'popup'),
     contentScript: path.join(srcPath, 'contentScript'),
     background: path.join(srcPath, 'background'),
   },

@@ -1,6 +1,6 @@
 const { existsSync, mkdirSync } = require('fs');
 const AdmZip = require('adm-zip');
-const {VERSION, VERSION_NAME} = require('./src/version');
+const { VERSION, VERSION_NAME } = require('./src/version');
 
 const APP_NAME = 'iconttv';
 const isFirefox = process.env.BROWSER_ENV === 'firefox';

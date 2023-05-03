@@ -26,7 +26,7 @@ class Iconttv {
 
     Observer.on(TWITCH_SELECTORS.chatSettingContainer, (node) => {
       injectSettings(node as Element);
-    })
+    });
 
     Logger.log('loaded');
   }

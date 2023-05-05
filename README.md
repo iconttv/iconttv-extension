@@ -12,13 +12,16 @@ Iconttv browser extension source code
 [**Firefox** extension](https://addons.mozilla.org/en-US/firefox/addon/%ED%8A%B8%EC%9C%84%EC%B9%98-%EC%BB%A4%EC%8A%A4%ED%85%80-%EC%95%84%EC%9D%B4%EC%BD%98-%EC%84%A0%ED%83%9D%EA%B8%B0/)
 
 
-## alpha-stage features
+## 2.0.0 beta features
 
 - 이미지 렌더링 및 태그 변환 수행
 - `70px * 70px`사이즈만 렌더링
 - 팝업 페이지 구현
 - 설정 페이지 없음
 
+### Limitations
+
+- 파이어폭스 브라우저에서 채팅창 자동 입력 불가
 
 ## Features
 

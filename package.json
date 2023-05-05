@@ -15,7 +15,10 @@
     "format": "prettier --write --ignore-unknown \"{config,public,src}/**/*.{html,css,js,ts,json}\" pack.js manifest.js"
   },
   "devDependencies": {
+    "@emotion/react": "^11.10.8",
+    "@emotion/styled": "^11.10.8",
     "@metamask/safe-event-emitter": "^3.0.0",
+    "@mui/material": "^5.12.3",
     "@types/chrome": "^0.0.181",
     "@types/react": "^18.2.1",
     "@types/react-dom": "^18.2.2",

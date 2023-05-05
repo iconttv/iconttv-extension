@@ -5,11 +5,11 @@ import { CLASSNAMES } from '../utils/classNames';
 import TWITCH_SELECTORS from '../utils/selectors';
 import { escapeHTMLTags, replaceStyleTags } from './tagsApply';
 import { matchIconElement } from './iconSearch';
-import tippy from 'tippy.js';
 import { getIconUrl } from '../server/api';
 import ChatInputListener from '../ChatInputListener';
+import { addTippyTo, destroyTippyFrom } from '../utils/elements';
 
-const MAGIC_CHAR = '~';
+export const MAGIC_CHAR = '~';
 
 /**
  * 미리 keyword -> icon element 매핑 생성하기 위한 함수
@@ -42,26 +42,8 @@ export function icon2element(icons: Icon[]): Keyword2Icon {
      * tippy 설정
      */
 
-    const thumbnailImage = iconImage.cloneNode(true) as HTMLImageElement;
-    thumbnailImage.src = getIconUrl(icon.uri ?? icon.thumbnailUri);
-    thumbnailImage.classList.add(CLASSNAMES.ICON.SMALL);
-    thumbnailImage.onmouseover = function () {
-      tippy(thumbnailImage, {
-        hideOnClick: true,
-        placement: 'top-start',
-        theme: 'twitch',
-      }).show();
-    };
-    thumbnailImage.onmouseout = function () {
-      (thumbnailImage as any)._tippy &&
-        (thumbnailImage as any)._tippy.destroy();
-    };
-
     icon.keywords.forEach((keyword) => {
-      keyword2icon[keyword] = {
-        iconImage: iconImage,
-        thumbnailImage: thumbnailImage,
-      };
+      keyword2icon[keyword] = iconImage;
     });
   }
 
@@ -196,36 +178,40 @@ export async function replaceTextToElements(
 
             tokenStartIndex = tokenIndex + 1;
 
-            const image = icon.iconImage.cloneNode(true) as HTMLImageElement;
+            const image = icon.cloneNode(true) as HTMLImageElement;
             image.onclick = function (event) {
-              ChatInputListener.setInputValue(
+              ChatInputListener.appendInputValue(
                 (event?.target as HTMLImageElement).alt,
                 true
               );
             };
             image.onmouseover = function () {
-              tippy(image, {
-                hideOnClick: true,
-                placement: 'top-end',
-                theme: 'twitch',
-              }).show();
+              addTippyTo(image, { placement: 'top-start' });
             };
             image.onmouseout = function () {
-              (image as any)._tippy && (image as any)._tippy.destroy();
+              destroyTippyFrom(image);
             };
             image.onload = function () {
+              /**
+               * 사용자가 의도적으로 스크롤을
+               * 올린 경우가 아니면
+               *
+               * 이미지 크기만큼 스크롤 내리기
+               */
+
               const scrollBar = document.querySelector(
                 TWITCH_SELECTORS.chatScroll
               );
+
               if (!scrollBar) return;
+
               const scrollDiff =
                 scrollBar.scrollHeight -
                 scrollBar.scrollTop -
                 scrollBar.clientHeight;
-              const iconHeight = (this as HTMLImageElement).height ?? 0;
-              Logger.log(scrollDiff, iconHeight);
-              if (scrollDiff <= iconHeight) {
-                scrollBar.scrollTop += iconHeight;
+
+              if (scrollDiff <= image.height * 2) {
+                scrollBar.scrollTop += image.height;
               }
             };
 

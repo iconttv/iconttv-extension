@@ -1,0 +1,100 @@
+.iconttv-selector-root {
+  position: absolute;
+  width: auto;
+  height: fit-content;
+  max-height: 20vh;
+  /* visibility: hidden; */
+  bottom: 100%;
+  margin: 0;
+  margin-bottom: 3.5px;
+}
+
+.iconttv-selector-wrapper {
+  backdrop-filter: blur(1.5px) brightness(0.8);
+  background-color: var(--color-background-input);
+
+  border-radius: var(--border-radius-medium);
+  border-color: var(--color-border-input);
+  border-style: solid;
+  border-width: var(--border-width-input);
+  color: var(--color-text-input);
+  background-clip: padding-box;
+  transition: box-shadow var(--timing-short) ease-in,
+    border var(--timing-short) ease-in,
+    background-color var(--timing-short) ease-in;
+
+  width: 100%;
+  height: inherit;
+  max-height: inherit;
+  z-index: 100;
+  overflow: auto;
+}
+
+.iconttv-selector-wrapper:hover {
+  background-color: var(--color-background-input-focus) !important;
+  border-color: var(--color-border-input-focus) !important;
+}
+
+.iconttv-selector-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.iconttv-selector-wrapper::-webkit-scrollbar-thumb {
+  height: 20%;
+  border-radius: 8px;
+}
+
+.tw-root--theme-dark .iconttv-selector-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.tw-root--theme-light .iconttv-selector-wrapper::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.iconttv-selector-wrapper::-webkit-scrollbar-track {
+  background: inherit;
+}
+
+.iconttv-selector-list {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+}
+
+img.iconttv-selector-item {
+  margin: 5px;
+  border-right: 1px solid gray;
+  border-bottom: 1px solid gray;
+  border-radius: 1px;
+  width: 40px;
+  height: 40px;
+}
+
+img.iconttv-selector-item:hover {
+  border: 1px white solid;
+  box-shadow: 0 0 10px 5px gray;
+  animation: enlarge 0.1s forwards;
+}
+
+img.iconttv-item-selected {
+  border: 1px white solid;
+  box-shadow: 0 0 10px 5px gray;
+  animation: enlarge 0.1s forwards;
+}
+
+img.iconttv-selector-icon {
+  background-image: url('https://api.probius.dev/twitch-icons/cdn/icon?size=32');
+  background-size: contain;
+}
+
+@keyframes enlarge {
+  from {
+    width: 40px;
+    height: 40px;
+  }
+  to {
+    width: 45px;
+    height: 45px;
+  }
+}

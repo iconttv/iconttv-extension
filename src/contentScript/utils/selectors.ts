@@ -1,22 +1,3 @@
-export async function waitFor<T>(callback: () => T, timeout = -1): Promise<T> {
-  return new Promise((resolve, reject) => {
-    const itvl = setInterval(() => {
-      const res = callback();
-      if (res) {
-        clearInterval(itvl);
-        resolve(res);
-      }
-    }, 100);
-
-    if (timeout > 0) {
-      setTimeout(() => {
-        clearInterval(itvl);
-        reject('timeout');
-      }, timeout);
-    }
-  });
-}
-
 const TWITCH_SELECTORS = {
   chatLineMessage: `.chat-line__message`,
   chatBody: `[data-a-target="chat-line-message-body"]`,
@@ -31,30 +12,7 @@ const TWITCH_SELECTORS = {
   chatSettingContainer: `[data-a-target="chat-settings-balloon"] [data-a-target="chat-settings-mod-view"]`,
   chatSettingContainerSeperator: `[role="separator"]`,
 
-  // documentTitle: 'title',
-  // documentHead: 'head',
-
-  // chatInputText: `[data-a-target="chat-input-text"]`,
-
-  // rightColumn: `.right-column`,
-
-  // streamChat: `.stream-chat`,
-  // hiddenChat: `[data-test-selector="stream-chat-hidden-state"]`,
-
-  // chatArea: `.video-chat__message-list-wrapper ul, .chat-scrollable-area__message-container`,
-
-  // chatLineParent: `.chat-line__no-background`,
-
-  // iconSelectorParent: `.rich-input-container`,
-  // inputSendButton: `[data-a-target="chat-send-button"]`,
-
-  // iconSelectorPositionBase: `.chat-input`,
-  // iconArea: `[data-a-target="watch-mode-to-home"]`,
-  // offline: `.channel-status-info--offline`,
-
-  // chatLineStatus: `.chat-line__status`,
-  // vodMessage: `.vod-message__content, .vod-message`,
-  // pinnedMessage: `.pinned-chat__message`,
+  iconSelectorParent: `.rich-input-container`,
 } as const;
 
 export type TwitchSelectorKeys = keyof typeof TWITCH_SELECTORS;

@@ -16,7 +16,9 @@ Iconttv browser extension source code
 
 - 이미지 렌더링 및 태그 변환 수행
 - `70px * 70px`사이즈만 렌더링
-- 팝업 페이지 및 설정 페이지 없음.
+- 팝업 페이지 구현
+- 설정 페이지 없음
+
 
 ## Features
 

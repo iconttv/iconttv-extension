@@ -21,12 +21,7 @@ export interface ServerIconList {
   timestamp: number;
 }
 
-export interface IconElement {
-  iconImage: Element;
-  thumbnailImage: Element;
-}
-
-export type Keyword2Icon = Record<string, IconElement>;
+export type Keyword2Icon = Record<string, Element>;
 
 export interface IconApplyOptions {
   replaceTags: boolean;

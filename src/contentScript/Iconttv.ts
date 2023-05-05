@@ -2,8 +2,6 @@ import Logger from '../Logger';
 import TWITCH_SELECTORS from './utils/selectors';
 import Observer from './Observer';
 import ChatListener, { ChatListenerEventTypes } from './ChatListener';
-import ChatInputListener from './ChatInputListener';
-import { getStreamerId } from './utils/streamerId';
 import { injectSettings } from './components/Settings';
 
 class Iconttv {

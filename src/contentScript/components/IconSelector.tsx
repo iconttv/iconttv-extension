@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from 'react-dom/client';
 import { Box, Stack } from '@mui/material';
-import {hideAll} from 'tippy.js';
+import { hideAll } from 'tippy.js';
 import TWITCH_SELECTORS from "../utils/selectors";
 import { addTippyTo, destroyTippyFrom, waitFor } from "../utils/elements";
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
@@ -37,20 +37,23 @@ function IconSelector() {
   const cursorRef = useRef(-1);
   const chatInputRef = useRef<HTMLDivElement | null>(null);
   const prevInputText = useRef("");
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpenRef = useRef(false);
   const [iconIdxList, setIconIdxList] = useState<number[]>([]);
 
   const closeSelector = () => {
+    if (!isOpenRef.current) return;
+
     cursorRef.current = -1
-    setIsOpen(false);
+    isOpenRef.current = false;
     setIconIdxList([]);
     hideAll({ duration: 0 })
   }
 
-  const keyInputHandler = (event: Event) => {
+  const onkeydownHandler = (event: Event) => {
     const inputText = (event.target as HTMLDivElement).innerText
     const inputKey = (event as KeyboardEvent).key || '';
-      
+    
+
     switch (inputKey) {
       case ("Enter"): {
         // 이 block에서 inputText를 사용해서 통계 생성
@@ -65,6 +68,13 @@ function IconSelector() {
           chatScrollBar.scrollTop = chatScrollBar.scrollHeight;
         }
         break;
+      }
+
+      case ("Backspace"): {
+        if (inputText.endsWith('~') || inputText.trim().length === 0) {
+          closeSelector();
+        }
+        return;
       }
       
       case ("ArrowRight"): {
@@ -117,7 +127,7 @@ function IconSelector() {
   };
 
 
-  const keyCommandHandler = (event: Event) => {
+  const onkeyupHandler = (event: Event) => {
     const inputText = (event.target as HTMLDivElement).innerText
     const inputKey = (event as KeyboardEvent).key || '';
       
@@ -127,7 +137,7 @@ function IconSelector() {
         const children = Array.from(listRef.current.children)
           .filter(element => !element.classList.contains(ICON_HIDE_CLASSNAME));
         
-        const current = children[cursorRef.current]
+        const current = children[cursorRef.current];
         const currentKeyword = current.getAttribute('alt') || "";
 
         const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR);
@@ -135,7 +145,7 @@ function IconSelector() {
 
         ChatInputListener.setInputValue(newInputText);
 
-        closeSelector()
+        closeSelector();
         return;
       }
         
@@ -143,24 +153,20 @@ function IconSelector() {
         closeSelector();
         return;
       }
+
       
       default: {
         /**
          * 조합키는 inputText로 바로 인식 되지 않고
          * inputKey로 인식됨
          */
-        if (inputText.length === 0 && inputKey !== MAGIC_CHAR) {
-          closeSelector();
-          return;
-        }
+        if (inputText.length === 0 && inputKey !== MAGIC_CHAR) return;
 
         const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR);
+        if (keywordStartIdx === -1) return;
+
         const keyword = inputText.slice(keywordStartIdx + 1);
-    
-        if (keyword.includes(' ')) {
-          closeSelector();
-          return;
-        };
+        if (keyword.includes(' ')) return;
         
         /**
          * 아이콘 검색 수행 
@@ -168,7 +174,7 @@ function IconSelector() {
          */
         const searchResult = searchIcon(keyword);
         setIconIdxList(searchResult);
-        setIsOpen(true);
+        isOpenRef.current = true;
       }
     }
   };
@@ -182,12 +188,12 @@ function IconSelector() {
     waitFor(() => document.querySelector(TWITCH_SELECTORS.chatInput))
       .then(chatInput => {
         chatInputRef.current = chatInput as HTMLDivElement
-        chatInputRef.current.onkeyup = keyCommandHandler;
+        chatInputRef.current.onkeyup = (event) => setTimeout(onkeyupHandler, 0, event);
 
         /**
          * 이거는 누르고 있을 때 계속 캡쳐됨
          */
-        chatInputRef.current.onkeydown = keyInputHandler;
+        chatInputRef.current.onkeydown = (event) => setTimeout(onkeydownHandler, 0, event);
       });
   }, []);
 
@@ -211,11 +217,14 @@ function IconSelector() {
 
 
   return <Box className='iconttv-selector-wrapper' sx={{
-    display: (isOpen && iconIdxList.length > 0) ? 'block' : 'none'
+    display: (isOpenRef.current && iconIdxList.length > 0) ? 'block' : 'none'
   }}>
     <Stack className="iconttv-selector-list" direction='row' flexWrap='wrap' ref={listRef}>
       {defaultIconList.map((icon, idx) => (
+
         <img
+          width={40}
+          height={40}
           key={icon.keywords[0]}
           className={`iconttv-selector-item iconttv-common lazy`}
           src={`${getIconUrl(icon.thumbnailUri)}`}
@@ -240,6 +249,7 @@ function IconSelector() {
             closeSelector()
           }}
         />
+        
       ))}
     </Stack> 
   </Box>

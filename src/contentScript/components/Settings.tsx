@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 function Settings() {
   return (<div>sadfsadfasfdfd</div>)
@@ -8,7 +8,8 @@ function Settings() {
 export function injectSettings(element: Element) {
   const app = document.createElement('div');
   app.id = 'iconttv-settings-root';
-
   element.appendChild(app);
-  ReactDOM.render(<Settings />, app);
+
+  const root = createRoot(app);
+  root.render(<Settings />);
 }

@@ -3,12 +3,13 @@ import SafeEventEmitter from '@metamask/safe-event-emitter';
 import { ServerIconList } from '../../common/types';
 import { getStreamerId } from '../utils/streamerId';
 import { emptyServerIconList, getIconList } from '../server/api';
-import TWITCH_SELECTORS from '../utils/selectors';
+import TWITCH_SELECTORS, { waitFor } from '../utils/selectors';
 import { applyIconToElement } from './iconApply';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 import { icon2element } from './iconApply';
 import { CLASSNAMES } from '../utils/classNames';
 import ChatInputListener from '../ChatInputListener';
+import { injectIconSelector } from '../components/IconSelector';
 
 export const ChatListenerEventTypes = {
   CHANGE_STREAMER_ID: 'change_streamerId',
@@ -57,6 +58,12 @@ class ChatListener extends SafeEventEmitter {
         serverIconList
       );
       LocalStorage.cache.set(STORAGE_KEY.CACHE.KEYWORD2ICON, keyword2icon);
+
+      /** 선택기를 위해서 입력 감시 설정 */
+      const iconSelectorParent = await waitFor(() =>
+        document.querySelector(TWITCH_SELECTORS.chatInputEditor)
+      );
+      if (iconSelectorParent) injectIconSelector(iconSelectorParent);
     } catch (e) {
       Logger.debug(`${this.streamerId}'s icon does not exists.`);
       // Logger.debug(e);
@@ -67,7 +74,10 @@ class ChatListener extends SafeEventEmitter {
     if (element.matches(`.${CLASSNAMES.PROCESSED}`)) return;
     element.classList.add(CLASSNAMES.PROCESSED);
 
-    const chatBody = element.querySelector(TWITCH_SELECTORS.chatBody);
+    const chatBody = await waitFor(
+      () => element.querySelector(TWITCH_SELECTORS.chatBody),
+      1000
+    );
     if (chatBody === null) return;
 
     // let start = Date.now();

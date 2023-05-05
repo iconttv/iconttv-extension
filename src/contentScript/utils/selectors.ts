@@ -1,3 +1,22 @@
+export async function waitFor<T>(callback: () => T, timeout = -1): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const itvl = setInterval(() => {
+      const res = callback();
+      if (res) {
+        clearInterval(itvl);
+        resolve(res);
+      }
+    }, 100);
+
+    if (timeout > 0) {
+      setTimeout(() => {
+        clearInterval(itvl);
+        reject('timeout');
+      }, timeout);
+    }
+  });
+}
+
 const TWITCH_SELECTORS = {
   chatLineMessage: `.chat-line__message`,
   chatBody: `[data-a-target="chat-line-message-body"]`,

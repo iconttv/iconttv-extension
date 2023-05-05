@@ -78,13 +78,17 @@ class LocalStorage {
 
     this.browser = {
       get: (key) => {
-        const storage = JSON.parse(this.browserStorage.getItem(this.browserKey) || "{}");
+        const storage = JSON.parse(
+          this.browserStorage.getItem(this.browserKey) || '{}'
+        );
         if (key in storage) return storage[key];
         return;
       },
 
       set: (key, value) => {
-        const storage = JSON.parse(this.browserStorage.getItem(this.browserKey) || "{}");
+        const storage = JSON.parse(
+          this.browserStorage.getItem(this.browserKey) || '{}'
+        );
         storage[key] = value;
         this.browserStorage.setItem(this.browserKey, JSON.stringify(storage));
         return value;

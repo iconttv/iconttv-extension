@@ -1,3 +1,4 @@
+import SafeEventEmitter from '@metamask/safe-event-emitter';
 import Logger from '../../Logger';
 import TWITCH_SELECTORS from '../utils/selectors';
 
@@ -84,10 +85,25 @@ class ChatInputListener {
   // }
 
   getInputValue(): string {
-    const inputComponent = this.__getInputComponent();
-    if (!inputComponent) return '';
+    /**
+     * inputComponent.memoizedProps.value 통해서 가져오면
+     * 한 두글자가 짤림
+     * eg. 안녕하세요 -> 안녕하세
+     *
+     * innerText 하면 마지막 문자가 잘림 (글자 말고)
+     * eg. 안녕하세요 -> 안녕하셍
+     *
+     * input react component에 리스너 추가하는게 제일 나은 것 같음
+     */
 
-    return this.inputComponent.memoizedProps.value;
+    // const inputComponent = this.__getInputComponent();
+    // if (!inputComponent) return '';
+    // Logger.debug(this.inputComponent);
+    // return this.inputComponent.memoizedProps.value;
+
+    const chatInput = document.querySelector(TWITCH_SELECTORS.chatInput);
+    if (!chatInput) return '';
+    return (chatInput as HTMLDivElement).innerText;
   }
 
   setInputValue(text: string, setFocus: boolean) {

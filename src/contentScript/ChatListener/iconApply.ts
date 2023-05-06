@@ -43,7 +43,7 @@ export function icon2element(icons: Icon[]): Keyword2Icon {
      */
 
     icon.keywords.forEach((keyword) => {
-      keyword2icon[keyword] = iconImage;
+      keyword2icon[keyword.toLowerCase()] = iconImage;
     });
   }
 

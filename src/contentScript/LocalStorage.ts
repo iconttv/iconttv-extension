@@ -79,7 +79,7 @@ class LocalStorage {
     this.browser = {
       get: (key) => {
         const storage = JSON.parse(
-          this.browserStorage.getItem(this.browserKey) || '{}'
+          this.browserStorage[this.browserKey] || '{}'
         );
         if (key in storage) return storage[key];
         return;
@@ -87,10 +87,10 @@ class LocalStorage {
 
       set: (key, value) => {
         const storage = JSON.parse(
-          this.browserStorage.getItem(this.browserKey) || '{}'
+          this.browserStorage[this.browserKey] || '{}'
         );
         storage[key] = value;
-        this.browserStorage.setItem(this.browserKey, JSON.stringify(storage));
+        this.browserStorage[this.browserKey] = JSON.stringify(storage);
         return value;
       },
     };
@@ -113,7 +113,9 @@ class LocalStorage {
     this.cacheStorage = defaultCacheStorage;
 
     this.browserStorage = window.localStorage ?? this.cacheStorage;
-    this.browserStorage.setItem(this.browserKey, defaultBrowserStorage);
+    if (!this.browserStorage[this.browserKey]) {
+      this.browserStorage[this.browserKey] = defaultBrowserStorage;
+    }
   }
 
   isExpired(key: string) {

@@ -2,6 +2,8 @@ import SafeEventEmitter from '@metamask/safe-event-emitter';
 import TWITCH_SELECTORS from '../utils/selectors';
 
 export const ChatInputListenerEventTypes = {
+
+  // 채팅창에 새로운 입력 값 추가됨
   NEW_VALUE: 'new_value',
 };
 

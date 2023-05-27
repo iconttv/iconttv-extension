@@ -140,6 +140,7 @@ function IconSelector() {
         const current = children[cursorRef.current];
         const currentKeyword = current.getAttribute('alt') || "";
 
+        // alt 값에는 `~`가 포함되어 있어서 keywordStartIdx에 1을 더할 필요 없음.
         const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR);
         const newInputText = `${inputText.slice(0, keywordStartIdx)}${currentKeyword}`;
 
@@ -195,7 +196,7 @@ function IconSelector() {
          */
         chatInputRef.current.onkeydown = (event) => setTimeout(onkeydownHandler, 0, event);
       });
-  }, []);
+  });
 
 
   useEffect(() => {
@@ -232,17 +233,18 @@ function IconSelector() {
           loading="lazy"
           data-tippy-content={`~${icon.keywords[0]}`}
           data-icon-idx={idx}
-          onMouseOver={function (event) {
+          onMouseOver={(event) => {
             addTippyTo(event.target as Element);
           }}
-          onMouseOut={function (event) {
+          onMouseOut={(event) => {
             destroyTippyFrom(event.target as Element);
           }}
-          onClick={function () {
+          onClick={() => {
             if (!chatInputRef.current) return;
 
             const inputText = chatInputRef.current.innerText;
-            const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR);
+            // 1을 더해야 `~`가 포함된 문자열을 유지할 수 있음.
+            const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR) + 1;
   
             ChatInputListener.setInputValue(`${inputText.slice(0, keywordStartIdx)}${icon.keywords[0]}`);
   

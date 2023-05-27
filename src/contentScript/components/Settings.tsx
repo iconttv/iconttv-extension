@@ -1,10 +1,14 @@
+import { Container, Divider, Box } from '@mui/material';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 const SETTING_ID = 'iconttv-settings-root';
 
 function Settings() {
-  return (<div>Iconttv settings</div>)
+  return (<Box>
+    <Divider />
+    <Container>Iconttv settings (WIP)</Container>
+  </Box>)
 }
 
 export function injectSettings(element: Element) {

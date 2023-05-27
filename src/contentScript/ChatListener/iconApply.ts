@@ -4,7 +4,6 @@ import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 import { CLASSNAMES } from '../utils/classNames';
 import TWITCH_SELECTORS from '../utils/selectors';
 import { escapeHTMLTags, replaceStyleTags } from './tagsApply';
-import { matchIconElement } from './iconSearch';
 import { getIconUrl } from '../server/api';
 import ChatInputListener from '../ChatInputListener';
 import { addTippyTo, destroyTippyFrom } from '../utils/elements';

@@ -64,6 +64,11 @@ export function replaceStyleTags(text: string) {
   text = text.replace(/--(.*)--/gi, '<strike>$1</strike>');
   text = text.replace(/__(.*)__/gi, '<u>$1</u>');
 
+  //닫는 태그가 있는 [b][i][s]
+  text = text.replace(/\[b\](.*)\[\/b\]/gi, '<b>$1</b>'); //볼드 [b]blah
+  text = text.replace(/\[i\](.*)\[\/i\]/gi, '<i>$1</i>'); //이탤릭 [i]blah
+  text = text.replace(/\[s\](.*)\[\/s\]/gi, '<strike>$1</strike>'); //취소선 [s]blah
+
   //닫는 태그가 없는 [b][i][s]
   text = text.replace(/\[b\](.*)/gi, '<b>$1</b>'); //볼드 [b]blah
   text = text.replace(/\[i\](.*)/gi, '<i>$1</i>'); //이탤릭 [i]blah

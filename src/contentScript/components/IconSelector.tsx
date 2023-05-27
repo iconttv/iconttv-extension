@@ -8,7 +8,7 @@ import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 import { ServerIconList } from "../../common/types";
 import { getIconUrl } from "../server/api";
 import { searchIcon } from "../ChatListener/iconSearch";
-import ChatInputListener, { ChatInputListenerEventTypes } from "../ChatInputListener";
+import ChatInputListener from "../ChatInputListener";
 import { MAGIC_CHAR } from "../ChatListener/iconApply";
 
 import '../styles/selector.css';

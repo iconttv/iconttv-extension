@@ -29,8 +29,8 @@ function formManifest() {
       {
         matches: ['*://*.twitch.tv/*'],
         run_at: 'document_end',
-        js: ['contentScript.js'],
-        css: ['contentScript.css'],
+        js: ['iconttv.js'],
+        css: ['iconttv.css'],
         world: 'MAIN',
       },
     ],

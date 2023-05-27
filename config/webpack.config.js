@@ -10,7 +10,7 @@ const config = (env, argv) =>
   merge(common, {
     entry: {
       popup: PATHS.src.popup,
-      contentScript: PATHS.src.contentScript,
+      iconttv: PATHS.src.contentScript,
       background: PATHS.src.background,
     },
     devtool: argv.mode === 'production' ? false : 'source-map',

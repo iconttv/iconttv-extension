@@ -17,36 +17,40 @@ export const MAGIC_CHAR = '~';
  * @param icons
  * @returns
  */
-export function icon2element(icons: Icon[]): Keyword2Icon {
+export async function icon2element(icons: Icon[]): Promise<Keyword2Icon> {
   const keyword2icon: Keyword2Icon = {};
 
-  for (const icon of icons) {
-    const iconImage = document.createElement('img');
-    iconImage.src = getIconUrl(icon.uri);
-    iconImage.alt = `~${icon.keywords[0]}`;
-    iconImage.classList.add(CLASSNAMES.ICONTTV, CLASSNAMES.ICON.COMMON);
-    iconImage.height = 0;
-    iconImage.onerror = function () {
-      this.onerror = null;
-      this.src = icon.originUri;
-    };
-    iconImage.setAttribute('data-uri', getIconUrl(icon.uri));
-    iconImage.setAttribute('data-hash', icon.nameHash);
-    iconImage.setAttribute('data-name', icon.name);
-    iconImage.setAttribute('data-keywords', icon.keywords.join(','));
-    iconImage.setAttribute('data-tags', icon.tags.join(','));
-    iconImage.setAttribute('data-tippy-content', `~${icon.keywords[0]}`);
-    iconImage.loading = 'lazy';
-    /**
-     * 채팅창 렌더링 되는 이미지는 추가될 때
-     * tippy 설정
-     */
+  const iconImages: Promise<HTMLImageElement>[] = icons.map((icon) => {
+    return new Promise((resolve) => {
+      const iconImage = document.createElement('img');
+      iconImage.src = getIconUrl(icon.uri);
+      iconImage.alt = `~${icon.keywords[0]}`;
+      iconImage.classList.add(CLASSNAMES.ICONTTV, CLASSNAMES.ICON.COMMON);
+      iconImage.height = 0;
+      iconImage.onerror = function () {
+        this.onerror = null;
+        this.src = icon.originUri;
+      };
+      iconImage.setAttribute('data-uri', getIconUrl(icon.uri));
+      iconImage.setAttribute('data-hash', icon.nameHash);
+      iconImage.setAttribute('data-name', icon.name);
+      iconImage.setAttribute('data-keywords', icon.keywords.join(','));
+      iconImage.setAttribute('data-tags', icon.tags.join(','));
+      iconImage.setAttribute('data-tippy-content', `~${icon.keywords[0]}`);
+      iconImage.loading = 'lazy';
+      /**
+       * 채팅창 렌더링 되는 이미지는 추가될 때
+       * tippy 설정
+       */
+      icon.keywords.forEach((keyword) => {
+        keyword2icon[keyword.toLowerCase()] = iconImage;
+      });
 
-    icon.keywords.forEach((keyword) => {
-      keyword2icon[keyword.toLowerCase()] = iconImage;
+      resolve(iconImage);
     });
-  }
+  });
 
+  await Promise.all(iconImages);
   return keyword2icon;
 }
 

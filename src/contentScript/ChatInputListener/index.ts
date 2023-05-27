@@ -1,8 +1,8 @@
 import SafeEventEmitter from '@metamask/safe-event-emitter';
 import TWITCH_SELECTORS from '../utils/selectors';
+import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 
 export const ChatInputListenerEventTypes = {
-
   // 채팅창에 새로운 입력 값 추가됨
   NEW_VALUE: 'new_value',
 };
@@ -21,6 +21,10 @@ class ChatInputListener extends SafeEventEmitter {
 
     this.inputComponent = null;
     this.editorComponent = null;
+
+    this.on(ChatInputListenerEventTypes.NEW_VALUE, (text: string) => {
+      LocalStorage.cache.set(STORAGE_KEY.CACHE.CHAT_INPUT, text);
+    });
   }
 
   __getReactInstance(selector: string) {

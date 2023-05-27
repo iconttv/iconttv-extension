@@ -22,8 +22,8 @@ class Iconttv {
       ChatListener.emit(ChatListenerEventTypes.CHANGE_STREAMER_ID);
     });
 
-    Observer.on(TWITCH_SELECTORS.chatSettingContainer, (node) => {
-      injectSettings(node as Element);
+    Observer.on(TWITCH_SELECTORS.chatSettingContainer, (node: Element) => {
+      injectSettings(node);
     });
 
     Logger.log('loaded');

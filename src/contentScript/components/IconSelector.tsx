@@ -36,7 +36,6 @@ function IconSelector() {
   const listRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef(-1);
   const chatInputRef = useRef<HTMLDivElement | null>(null);
-  const prevInputText = useRef("");
   const isOpenRef = useRef(false);
   const [iconIdxList, setIconIdxList] = useState<number[]>([]);
 
@@ -58,7 +57,7 @@ function IconSelector() {
       case ("Enter"): {
         // 이 block에서 inputText를 사용해서 통계 생성
         closeSelector();
-        prevInputText.current = inputText;
+        LocalStorage.cache.set(STORAGE_KEY.CACHE.CHAT_INPUT, inputText);
 
         /**
          * 엔터 입력하면 자동으로 끝까지
@@ -182,10 +181,6 @@ function IconSelector() {
 
 
   useEffect(() => {
-    ChatInputListener.on(ChatInputListenerEventTypes.NEW_VALUE, (text: string) => {
-      prevInputText.current = text;
-    })
-
     waitFor(() => document.querySelector(TWITCH_SELECTORS.chatInput))
       .then(chatInput => {
         chatInputRef.current = chatInput as HTMLDivElement

@@ -10,6 +10,8 @@ import { icon2element } from './iconApply';
 import { CLASSNAMES } from '../utils/classNames';
 import { injectIconSelector } from '../components/IconSelector';
 
+const DEVELOPERS = ['drowsyprobius'];
+
 export const ChatListenerEventTypes = {
   CHANGE_STREAMER_ID: 'change_streamerId',
   NEW_CHAT: 'new_chat',
@@ -39,7 +41,7 @@ class ChatListener extends SafeEventEmitter {
     //   streamerId = ChatInputListener.getStreamerName();
 
     /** For debugging */
-    if (streamerId === 'drowsyprobius') streamerId = 'funzinnu';
+    if (DEVELOPERS.includes(streamerId)) streamerId = 'funzinnu';
 
     if (this.streamerId === streamerId) return;
     this.streamerId = streamerId;
@@ -48,7 +50,7 @@ class ChatListener extends SafeEventEmitter {
 
     try {
       const serverIconList = await getIconList(this.streamerId);
-      const keyword2icon = icon2element(serverIconList.icons);
+      const keyword2icon = await icon2element(serverIconList.icons);
 
       Logger.debug(`Processing ${this.streamerId}'s icons...`);
 
@@ -65,7 +67,6 @@ class ChatListener extends SafeEventEmitter {
       if (iconSelectorParent) injectIconSelector(iconSelectorParent);
     } catch (e) {
       Logger.debug(`${this.streamerId}'s icon does not exists.`);
-      // Logger.debug(e);
     }
   }
 

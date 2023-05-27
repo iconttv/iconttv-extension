@@ -14,6 +14,7 @@ import { emptyServerIconList } from './server/api';
  */
 interface CacheStorage extends Record<string, any> {
   streamerId: string;
+  chatInput: string;
   serverIconList: ServerIconList;
   keyword2icon: Keyword2Icon;
 }
@@ -27,9 +28,10 @@ type BrowserStorageValue = string | boolean | number;
 
 const defaultCacheStorage: CacheStorage = {
   streamerId: '',
+  chatInput: '',
   serverIconList: emptyServerIconList,
   keyword2icon: {},
-};
+} as const;
 const defaultBrowserStorage: string = JSON.stringify({
   replaceTag: true,
   iconSize: 'medium',
@@ -38,6 +40,7 @@ const defaultBrowserStorage: string = JSON.stringify({
 export const STORAGE_KEY = {
   CACHE: {
     STREAMER_ID: 'streamerId',
+    CHAT_INPUT: 'chatInput',
     SERVER_ICON_LIST: 'serverIconList',
     KEYWORD2ICON: 'keyword2icon',
   },
@@ -45,7 +48,7 @@ export const STORAGE_KEY = {
     REPLACE_TAG: 'replaceTag',
     ICON_SIZE: 'iconSize',
   },
-};
+} as const;
 
 class LocalStorage {
   static #instance: LocalStorage;

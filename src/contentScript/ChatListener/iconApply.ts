@@ -124,7 +124,7 @@ export async function applyIconToElement(element: Element): Promise<Element> {
 export async function replaceTextToElements(
   chatTextSpan: Element
 ): Promise<Element[]> {
-  const innerText = chatTextSpan.textContent?.trim();
+  const innerText = chatTextSpan.textContent;
   if (innerText === null || innerText === undefined || innerText.length === 0)
     return [chatTextSpan];
 
@@ -139,93 +139,85 @@ export async function replaceTextToElements(
 
       switch (childElement.nodeType) {
         case Node.TEXT_NODE: {
-          /**
-           * 공백으로 구분된 것만 아이콘으로 변환하는 이유는
-           * 계산 효율성 때문
-           *
-           * BridgeBBCC에서는 icon.keywords에 있는 목록에서부터
-           * 부분 문자열 탐색하므로 오래걸릴 듯
-           */
           const textContent = childElement.textContent;
           if (textContent === null) {
             children.push(childElement);
             continue;
           }
 
-          const tokens = textContent.trim().split(' ');
-          let tokenStartIndex = 0,
-            tokenIndex = 0;
-          for (; tokenIndex < tokens.length; tokenIndex++) {
-            const token = tokens[tokenIndex];
-            if (isReplaced || !token.startsWith(MAGIC_CHAR)) continue;
+          const keywords = LocalStorage.cache.get(
+            STORAGE_KEY.CACHE.KEYWORDS
+          ) as string[];
+          const keyword2icon = LocalStorage.cache.get(
+            STORAGE_KEY.CACHE.KEYWORD2ICON
+          ) as Keyword2Icon;
+          /** 효율성 문제 있을까? */
+          for (
+            let startIdx = 0;
+            !isReplaced && startIdx < textContent.length;
+            startIdx++
+          ) {
+            if (textContent[startIdx] !== MAGIC_CHAR) continue;
+            const restContent = textContent.slice(startIdx);
 
-            const keyword = token.slice(MAGIC_CHAR.length);
-            const icon = matchIconElement(keyword);
-            if (!icon) continue;
+            for (const rawKeyword of keywords) {
+              const keyword = `~${rawKeyword}`;
+              if (!restContent.startsWith(keyword)) continue;
 
-            /** 매치되는 아이콘 존재 */
+              const prev = textContent.slice(0, startIdx);
+              const rest = textContent.slice(startIdx + keyword.length);
+              const icon = keyword2icon[rawKeyword];
 
-            /**
-             * 아이콘 이전까지의 token을 종합해서
-             * 하나의 text-fragment로 생성
-             */
-            if (
-              tokens.slice(tokenStartIndex, tokenIndex).join(' ').length > 0
-            ) {
-              children.push(
-                elementWrapper(
-                  tokens.slice(tokenStartIndex, tokenIndex).join(' '),
-                  'text'
-                )
-              );
+              const image = icon.cloneNode() as HTMLImageElement;
+              image.onclick = function (event) {
+                ChatInputListener.appendInputValue(
+                  (event?.target as HTMLImageElement).alt,
+                  true
+                );
+              };
+              image.onmouseover = function () {
+                addTippyTo(image, { placement: 'top-start' });
+              };
+              image.onmouseout = function () {
+                destroyTippyFrom(image);
+              };
+              image.onload = function () {
+                /**
+                 * 사용자가 의도적으로 스크롤을
+                 * 올린 경우가 아니면
+                 *
+                 * 이미지 크기만큼 스크롤 내리기
+                 */
+
+                const scrollBar = document.querySelector(
+                  TWITCH_SELECTORS.chatScroll
+                );
+
+                if (!scrollBar) return;
+
+                const scrollDiff =
+                  scrollBar.scrollHeight -
+                  scrollBar.scrollTop -
+                  scrollBar.clientHeight;
+
+                if (scrollDiff <= image.height * 2) {
+                  scrollBar.scrollTop += image.height * 2;
+                }
+              };
+
+              children.push(elementWrapper(prev, 'text'));
+              children.push(elementWrapper(image, iconSizeOption));
+              children.push(elementWrapper(rest, 'text'));
+
+              // if (iconSizeOption !== 'small')
+              isReplaced = true;
+              break;
             }
-
-            tokenStartIndex = tokenIndex + 1;
-
-            const image = icon.cloneNode(true) as HTMLImageElement;
-            image.onclick = function (event) {
-              ChatInputListener.appendInputValue(
-                (event?.target as HTMLImageElement).alt,
-                true
-              );
-            };
-            image.onmouseover = function () {
-              addTippyTo(image, { placement: 'top-start' });
-            };
-            image.onmouseout = function () {
-              destroyTippyFrom(image);
-            };
-            image.onload = function () {
-              /**
-               * 사용자가 의도적으로 스크롤을
-               * 올린 경우가 아니면
-               *
-               * 이미지 크기만큼 스크롤 내리기
-               */
-
-              const scrollBar = document.querySelector(
-                TWITCH_SELECTORS.chatScroll
-              );
-
-              if (!scrollBar) return;
-
-              const scrollDiff =
-                scrollBar.scrollHeight -
-                scrollBar.scrollTop -
-                scrollBar.clientHeight;
-
-              if (scrollDiff <= image.height * 2) {
-                scrollBar.scrollTop += image.height;
-              }
-            };
-
-            if (iconSizeOption !== 'small') isReplaced = true;
-            children.push(elementWrapper(image, iconSizeOption));
           }
 
-          const leftover = tokens.slice(tokenStartIndex, tokenIndex).join(' ');
-          if (tokenStartIndex < tokenIndex && leftover.length > 0) {
-            children.push(elementWrapper(leftover, 'text'));
+          /** 변환된 아이콘이 없으면 기존 텍스트 그대로 반환 */
+          if (!isReplaced) {
+            children.push(elementWrapper(textContent, 'text'));
           }
 
           break;

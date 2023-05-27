@@ -17,8 +17,9 @@ interface CacheStorage extends Record<string, any> {
   chatInput: string;
   serverIconList: ServerIconList;
   keyword2icon: Keyword2Icon;
+  keywords: string[];
 }
-type CacheStorageValue = string | ServerIconList | Keyword2Icon;
+type CacheStorageValue = string | string[] | ServerIconList | Keyword2Icon;
 
 interface BrowserStorage extends Record<string, string | boolean | number> {
   replaceTag: boolean;
@@ -31,7 +32,8 @@ const defaultCacheStorage: CacheStorage = {
   chatInput: '',
   serverIconList: emptyServerIconList,
   keyword2icon: {},
-} as const;
+  keywords: [],
+};
 const defaultBrowserStorage: string = JSON.stringify({
   replaceTag: true,
   iconSize: 'medium',
@@ -43,6 +45,7 @@ export const STORAGE_KEY = {
     CHAT_INPUT: 'chatInput',
     SERVER_ICON_LIST: 'serverIconList',
     KEYWORD2ICON: 'keyword2icon',
+    KEYWORDS: 'keywords',
   },
   BROWSER: {
     REPLACE_TAG: 'replaceTag',

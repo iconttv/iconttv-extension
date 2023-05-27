@@ -59,6 +59,10 @@ class ChatListener extends SafeEventEmitter {
         serverIconList
       );
       LocalStorage.cache.set(STORAGE_KEY.CACHE.KEYWORD2ICON, keyword2icon);
+      LocalStorage.cache.set(
+        STORAGE_KEY.CACHE.KEYWORDS,
+        Object.keys(keyword2icon).sort((a, b) => b.length - a.length)
+      );
 
       /** 선택기를 위해서 입력 감시 설정 */
       const iconSelectorParent = await waitFor(() =>

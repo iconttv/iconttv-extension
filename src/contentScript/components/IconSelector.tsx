@@ -6,7 +6,7 @@ import TWITCH_SELECTORS from "../utils/selectors";
 import { addTippyTo, destroyTippyFrom, waitFor } from "../utils/elements";
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 import { ServerIconList } from "../../common/types";
-import { getIconUrl } from "../server/api";
+import { AppIconImage, getIconUrl } from "../server/api";
 import { searchIcon } from "../ChatListener/iconSearch";
 import ChatInputListener from "../ChatInputListener";
 import { MAGIC_CHAR } from "../ChatListener/iconApply";
@@ -32,7 +32,7 @@ function IconSelector() {
   const defaultIconList = (
     LocalStorage.cache.get(STORAGE_KEY.CACHE.SERVER_ICON_LIST) as ServerIconList
   ).icons;
-
+  
   const listRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef(-1);
   const chatInputRef = useRef<HTMLDivElement | null>(null);
@@ -125,7 +125,6 @@ function IconSelector() {
     }
   };
 
-
   const onkeyupHandler = (event: Event) => {
     const inputText = (event.target as HTMLDivElement).innerText
     const inputKey = (event as KeyboardEvent).key || '';
@@ -179,18 +178,66 @@ function IconSelector() {
     }
   };
 
-
   useEffect(() => {
-    waitFor(() => document.querySelector(TWITCH_SELECTORS.chatInput))
-      .then(chatInput => {
-        chatInputRef.current = chatInput as HTMLDivElement
-        chatInputRef.current.onkeyup = (event) => setTimeout(onkeyupHandler, 0, event);
+    if (!document.getElementById('iconttv-picker')) {
+      waitFor(() => document.querySelector(TWITCH_SELECTORS.defaultEmotePicker))
+      .then(emotePicker => {
+        if (!emotePicker) return;
+        const emotePickerParent = emotePicker.parentElement;
 
-        /**
-         * 이거는 누르고 있을 때 계속 캡쳐됨
-         */
-        chatInputRef.current.onkeydown = (event) => setTimeout(onkeydownHandler, 0, event);
+        const button = document.createElement('button');
+        const buttonImg = document.createElement('img');
+        button.className = emotePicker.className;
+        button.setAttribute('aria-label', '디시콘 선택창');
+        button.setAttribute('data-a-target', 'iconttv-picker-button');
+        button.id = 'iconttv-picker'
+        button.style.width = '30px';
+        button.style.height = '30px';
+        button.onclick = () => {
+          if (isOpenRef.current) {
+            closeSelector();
+          } else {
+            setIconIdxList(defaultIconList.map((_, i) => i));
+            isOpenRef.current = true;
+          }
+        }
+
+        buttonImg.style.backgroundImage = `url(${AppIconImage()})`;
+        buttonImg.style.backgroundSize = 'contain';
+        buttonImg.style.width = '20px';
+        buttonImg.style.height = '20px';
+        button.appendChild(buttonImg);
+
+        emotePickerParent?.insertBefore(button, emotePickerParent.firstChild);
+        
+        /** 아이콘 추가해서 입력 창 크기 조절 */
+        const chatInput = document.querySelector(TWITCH_SELECTORS.chatInput) as HTMLDivElement;
+        if (!chatInput) return;
+        const prevValue = parseFloat(chatInput.style.paddingRight)
+        if (Number.isNaN(prevValue)) return;
+        chatInput.style.paddingRight = `${prevValue + 1}rem`;
+      })
+    }
+    
+    waitFor(() => document.querySelector(TWITCH_SELECTORS.chatInput))
+    .then(chatInput => {
+      chatInputRef.current = chatInput as HTMLDivElement
+      chatInputRef.current.onkeyup = (event) => setTimeout(onkeyupHandler, 0, event);
+
+      /**
+       * 이거는 누르고 있을 때 계속 캡쳐됨
+       */
+      chatInputRef.current.onkeydown = (event) => setTimeout(onkeydownHandler, 0, event);
+    });
+
+    return () => {
+      waitFor(() => document.querySelector(TWITCH_SELECTORS.chatInput))
+        .then(chatInput => {
+          chatInputRef.current = chatInput as HTMLDivElement
+          chatInputRef.current.onkeyup = () => { };
+          chatInputRef.current.onkeydown = () => {};
       });
+    }
   });
 
 
@@ -238,11 +285,14 @@ function IconSelector() {
             if (!chatInputRef.current) return;
 
             const inputText = chatInputRef.current.innerText;
-            // 1을 더해야 `~`가 포함된 문자열을 유지할 수 있음.
-            const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR) + 1;
-  
-            ChatInputListener.setInputValue(`${inputText.slice(0, keywordStartIdx)}${icon.keywords[0]}`);
-  
+            if (inputText.trim().length === 0) {
+              ChatInputListener.setInputValue(`~${icon.keywords[0]}`)
+            } else {
+              const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR);
+              ChatInputListener.setInputValue(
+                keywordStartIdx === -1 ? `${inputText}~${icon.keywords[0]}` : `${inputText.slice(0, keywordStartIdx + 1)}${icon.keywords[0]}`
+              )
+            }
             closeSelector()
           }}
         />
@@ -253,6 +303,8 @@ function IconSelector() {
 }
 
 export function injectIconSelector(element: Element) {
+  if (document.getElementById('iconttv-selector-root')) return;
+
   const app = document.createElement('div');
   app.id = 'iconttv-selector-root';
   app.className = 'iconttv-selector-root';

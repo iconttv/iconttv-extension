@@ -6,7 +6,7 @@ import {
   Keyword2Icon,
   ServerIconList,
 } from '../common/types';
-import { emptyServerIconList } from './server/api';
+import { emptyIconListResponse } from './server/api';
 
 /**
  * 페이지 바뀌면 초기화되는
@@ -30,7 +30,7 @@ type BrowserStorageValue = string | boolean | number;
 const defaultCacheStorage: CacheStorage = {
   streamerId: '',
   chatInput: '',
-  serverIconList: emptyServerIconList,
+  serverIconList: emptyIconListResponse,
   keyword2icon: {},
   keywords: [],
 };

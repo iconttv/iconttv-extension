@@ -83,11 +83,6 @@ img.iconttv-item-selected {
   animation: enlarge 0.1s forwards;
 }
 
-img.iconttv-selector-icon {
-  background-image: url('https://api.probius.dev/twitch-icons/cdn/icon?size=32');
-  background-size: contain;
-}
-
 @keyframes enlarge {
   from {
     width: 40px;

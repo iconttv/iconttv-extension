@@ -18,7 +18,11 @@ function fetchWrapper(api: string, options?: RequestInit): Promise<Response> {
   });
 }
 
-export const emptyServerIconList = {
+export const AppIconImage = (size = 32) => 
+  `https://api.probius.dev/twitch-icons/cdn/icon?size=${size}`
+
+
+export const emptyIconListResponse = {
   icons: [],
   timestamp: 0,
 };

@@ -13,6 +13,9 @@ const TWITCH_SELECTORS = {
   chatSettingContainerSeperator: `[role="separator"]`,
 
   iconSelectorParent: `.rich-input-container`,
+
+  /** parentElement로 상위 컨테이너 가져와야 함 */
+  defaultEmotePicker: `[data-a-target="emote-picker-button"]`,
 } as const;
 
 export type TwitchSelectorKeys = keyof typeof TWITCH_SELECTORS;

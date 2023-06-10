@@ -12,8 +12,11 @@ Iconttv browser extension source code
 [**Firefox** extension](https://addons.mozilla.org/en-US/firefox/addon/%ED%8A%B8%EC%9C%84%EC%B9%98-%EC%BB%A4%EC%8A%A4%ED%85%80-%EC%95%84%EC%9D%B4%EC%BD%98-%EC%84%A0%ED%83%9D%EA%B8%B0/)
 
 
-## 2.0.2
+## 2.0.3
+- 성능 및 동작 개선
+- 타 플러그인과의 호환성 개선
 
+## 2.0.2
 
 - 태그 닫는 명령어 지원
 - 클릭 가능한 팝업 선택기 구현

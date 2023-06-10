@@ -9,6 +9,7 @@ import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 import { icon2element } from './iconApply';
 import { CLASSNAMES } from '../utils/classNames';
 import { injectIconSelector } from '../components/IconSelector';
+import Observer from '../Observer';
 
 const DEVELOPERS = ['drowsyprobius'];
 
@@ -64,12 +65,14 @@ class ChatListener extends SafeEventEmitter {
         Object.keys(keyword2icon).sort((a, b) => b.length - a.length)
       );
 
+      Observer.activate();
       /** 선택기를 위해서 입력 감시 설정 */
       const iconSelectorParent = await waitFor(() =>
         document.querySelector(TWITCH_SELECTORS.iconSelectorParent)
       );
       if (iconSelectorParent) injectIconSelector(iconSelectorParent);
     } catch (e) {
+      Observer.deactivate();
       Logger.debug(`${this.streamerId}'s icon does not exists.`);
     }
   }

@@ -1,3 +1,4 @@
+import Logger from '../Logger';
 import { TwitchSelectors } from './utils/selectors';
 
 export interface ObserverCallbackWrapper<T> {
@@ -7,6 +8,7 @@ export interface ObserverCallbackWrapper<T> {
 class Observer {
   static #instance: Observer;
 
+  isActivate!: boolean;
   observer!: MutationObserver;
   callbacks!: Partial<Record<TwitchSelectors, ((node: Element) => void)[]>>;
 
@@ -14,8 +16,10 @@ class Observer {
     if (Observer.#instance) return Observer.#instance;
     Observer.#instance = this;
 
+    this.isActivate = true;
     this.callbacks = {};
     this.observer = new MutationObserver((mutations) => {
+      if (!this.isActivate) return;
       if (this.callbacks === undefined) return;
 
       // mutations.target: parent of addedNodes
@@ -61,6 +65,9 @@ class Observer {
     const prev = this.callbacks[selector] ?? [];
     this.callbacks[selector] = prev.filter((cb) => cb !== callback);
   }
+
+  activate() { Logger.debug(`observer enabled`); this.isActivate = true; }
+  deactivate() { Logger.debug(`observer disabled`); this.isActivate = false; }
 }
 
 export default new Observer();

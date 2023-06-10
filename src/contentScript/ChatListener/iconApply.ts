@@ -95,34 +95,10 @@ function elementWrapper(
 
 /**
  *
- * @param element TWITCH_SELECTORS.chatBody
- * @param options
- * @returns
- */
-export async function applyIconToElement(element: Element): Promise<Element> {
-  const convertedChildren: Element[] = [];
-
-  for (const child of element.children) {
-    if (child.matches(TWITCH_SELECTORS.chatText)) {
-      const converted = await replaceTextToElements(child);
-      convertedChildren.push(...converted);
-    } else {
-      convertedChildren.push(child);
-    }
-  }
-
-  element.replaceChildren(...convertedChildren);
-  return element;
-}
-
-/**
- *
  * @param chatTextSpan TWITCH_SELECTORS.chatText
  * @returns
  */
-export async function replaceTextToElements(
-  chatTextSpan: Element
-): Promise<Element[]> {
+export function replaceTextToElements(chatTextSpan: Element): Element[] {
   const innerText = chatTextSpan.textContent;
   if (innerText === null || innerText === undefined || innerText.length === 0)
     return [chatTextSpan];
@@ -151,6 +127,7 @@ export async function replaceTextToElements(
             STORAGE_KEY.CACHE.KEYWORD2ICON
           ) as Keyword2Icon;
           /** 효율성 문제 있을까? */
+
           for (
             let startIdx = 0;
             !isReplaced && startIdx < textContent.length;

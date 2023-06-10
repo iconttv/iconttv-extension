@@ -1,11 +1,12 @@
 const TWITCH_SELECTORS = {
-  chatLineMessage: `.chat-line__message`,
-  chatBody: `[data-a-target="chat-line-message-body"]`,
-  chatText: `.text-fragment`,
+  // chatLineMessage: `.chat-line__message`,
+  chatBody: `[data-a-target="chat-line-message-body"], .seventv-chat-message-body`,
+  chatText: `.text-fragment, .text-token`,
   chatInput: `[data-a-target="chat-input"]`,
   chatScroll: `div[data-a-target='chat-scroller'] .simplebar-scroll-content`,
+  chatThirdPartyEmote: `.bttv-emote, .seventv-emote-box`,
 
-  chatInputEditor: `.chat-wysiwyg-input__editor`,
+  chatInputEditor: `.rich-input-container`,
 
   chatButtonContainer: `[data-test-selector="chat-input-buttons-container"]`,
   chatSettingButton: `[data-a-target="chat-settings"]`,

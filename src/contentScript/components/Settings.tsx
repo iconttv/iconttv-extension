@@ -2,7 +2,7 @@ import { Container, Divider, Box } from '@mui/material';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-const SETTING_ID = 'iconttv-settings-root';
+const ICONTTV_SETTING_ID = 'iconttv-settings-root';
 
 function Settings() {
   return (<Box>
@@ -11,13 +11,18 @@ function Settings() {
   </Box>)
 }
 
-export function injectSettings(element: Element) {
-  if (document.getElementById(SETTING_ID)) return;
+export function mountSettings(element: Element) {
+  if (document.getElementById(ICONTTV_SETTING_ID)) return;
 
   const app = document.createElement('div');
-  app.id = SETTING_ID;
+  app.id = ICONTTV_SETTING_ID;
   element.appendChild(app);
 
   const root = createRoot(app);
   root.render(<Settings />);
+}
+
+export function unmountSettings() {
+  const settings = document.getElementById(ICONTTV_SETTING_ID);
+  if (settings) settings.remove();
 }

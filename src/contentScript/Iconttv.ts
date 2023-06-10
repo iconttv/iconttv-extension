@@ -1,8 +1,9 @@
 import Logger from '../Logger';
 import TWITCH_SELECTORS from './utils/selectors';
-import Observer from './Observer';
+import DOMObserver from './Observer/DOM';
+import URLObserver from './Observer/URL';
 import ChatListener, { ChatListenerEventTypes } from './ChatListener';
-import { injectSettings } from './components/Settings';
+import { mountSettings } from './components/Settings';
 
 class Iconttv {
   static #instance: Iconttv;
@@ -14,16 +15,20 @@ class Iconttv {
     ChatListener.emit(ChatListenerEventTypes.CHANGE_STREAMER_ID);
 
     /** Observer 설정 */
-    Observer.on(TWITCH_SELECTORS.chatLineMessage, (node) => {
+    DOMObserver.on(TWITCH_SELECTORS.chatBody, (node) => {
       ChatListener.emit(ChatListenerEventTypes.NEW_CHAT, node);
     });
 
-    Observer.on(TWITCH_SELECTORS.chatInputEditor, () => {
+    URLObserver.on(() => {
       ChatListener.emit(ChatListenerEventTypes.CHANGE_STREAMER_ID);
     });
 
-    Observer.on(TWITCH_SELECTORS.chatSettingContainer, (node: Element) => {
-      injectSettings(node);
+    DOMObserver.on(TWITCH_SELECTORS.chatInputEditor, () => {
+      ChatListener.emit(ChatListenerEventTypes.CHAT_MOUNT);
+    });
+
+    DOMObserver.on(TWITCH_SELECTORS.chatSettingContainer, (node: Element) => {
+      mountSettings(node);
     });
 
     Logger.log('loaded');

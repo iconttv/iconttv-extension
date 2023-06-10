@@ -13,6 +13,7 @@ import { MAGIC_CHAR } from "../ChatListener/iconApply";
 
 import '../styles/selector.css';
 
+const ICONTTV_SELECTOR_ID = 'iconttv-selector-root';
 
 /**
  * 채팅 입력이 변할 때마다 새로 렌더링하면 
@@ -238,7 +239,7 @@ function IconSelector() {
           chatInputRef.current.onkeydown = () => {};
       });
     }
-  });
+  }, []);
 
 
   useEffect(() => {
@@ -273,6 +274,7 @@ function IconSelector() {
           src={`${getIconUrl(icon.thumbnailUri)}`}
           alt={`~${icon.keywords[0]}`}
           loading="lazy"
+          decoding="async"
           data-tippy-content={`~${icon.keywords[0]}`}
           data-icon-idx={idx}
           onMouseOver={(event) => {
@@ -302,12 +304,12 @@ function IconSelector() {
   </Box>
 }
 
-export function injectIconSelector(element: Element) {
-  if (document.getElementById('iconttv-selector-root')) return;
+export function mountIconSelector(element: Element) {
+  if (document.getElementById(ICONTTV_SELECTOR_ID)) return;
 
   const app = document.createElement('div');
-  app.id = 'iconttv-selector-root';
-  app.className = 'iconttv-selector-root';
+  app.id = ICONTTV_SELECTOR_ID;
+  app.className = ICONTTV_SELECTOR_ID;
   element.appendChild(app);
 
   const root = createRoot(app);
@@ -316,3 +318,7 @@ export function injectIconSelector(element: Element) {
   return app;
 }
 
+export function unmountIconSelector() {
+  const selector = document.getElementById(ICONTTV_SELECTOR_ID);
+  if (selector) selector.remove();
+}

@@ -4,24 +4,26 @@ import { getStreamerId } from '../utils/streamerId';
 import { getIconList } from '../server/api';
 import TWITCH_SELECTORS from '../utils/selectors';
 import { waitFor } from '../utils/elements';
-import { applyIconToElement } from './iconApply';
+import { replaceTextToElements } from './iconApply';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 import { icon2element } from './iconApply';
 import { CLASSNAMES } from '../utils/classNames';
-import { injectIconSelector } from '../components/IconSelector';
-import Observer from '../Observer';
+import { mountIconSelector, unmountIconSelector } from '../components/IconSelector';
+import DOMObserver from '../Observer/DOM';
 
 const DEVELOPERS = ['drowsyprobius'];
 
 export const ChatListenerEventTypes = {
   CHANGE_STREAMER_ID: 'change_streamerId',
   NEW_CHAT: 'new_chat',
+  CHAT_MOUNT: 'chat_mount',
 };
 
 class ChatListener extends SafeEventEmitter {
   static #instance: ChatListener;
 
   streamerId: string = '';
+  status!: 'loading' | 'enabled' | 'disabled';
 
   constructor() {
     super();
@@ -29,14 +31,18 @@ class ChatListener extends SafeEventEmitter {
     if (ChatListener.#instance) return ChatListener.#instance;
     ChatListener.#instance = this;
 
+    this.status = 'loading';
+
     this.on(
       ChatListenerEventTypes.CHANGE_STREAMER_ID,
       this.changeStreamerIdHandler
     );
+    this.on(ChatListenerEventTypes.CHAT_MOUNT, this.chatMountHandler);
     this.on(ChatListenerEventTypes.NEW_CHAT, this.newChatHandler);
   }
 
   async changeStreamerIdHandler() {
+    this.status = 'loading';
     let streamerId = getStreamerId(window.location.href);
     // if (streamerId === '')
     //   streamerId = ChatInputListener.getStreamerName();
@@ -65,32 +71,39 @@ class ChatListener extends SafeEventEmitter {
         Object.keys(keyword2icon).sort((a, b) => b.length - a.length)
       );
 
-      Observer.activate();
+      this.status = 'enabled';
+      DOMObserver.activate();
       /** 선택기를 위해서 입력 감시 설정 */
-      const iconSelectorParent = await waitFor(() =>
-        document.querySelector(TWITCH_SELECTORS.iconSelectorParent)
-      );
-      if (iconSelectorParent) injectIconSelector(iconSelectorParent);
     } catch (e) {
-      Observer.deactivate();
+      this.status = 'disabled'
+      DOMObserver.deactivate();
+      unmountIconSelector();
       Logger.debug(`${this.streamerId}'s icon does not exists.`);
     }
   }
 
-  async newChatHandler(element: Element) {
-    if (element.matches(`.${CLASSNAMES.PROCESSED}`)) return;
-    element.classList.add(CLASSNAMES.PROCESSED);
+  async chatMountHandler() {
+    if (this.status !== 'enabled') return;
 
-    try {
-      const chatBody = await waitFor(
-        () => element.querySelector(TWITCH_SELECTORS.chatBody),
-        1000
-      );
-      if (chatBody === null) return;
+    const iconSelectorParent = await waitFor(() =>
+      document.querySelector(TWITCH_SELECTORS.iconSelectorParent)
+    );
+    if (iconSelectorParent) mountIconSelector(iconSelectorParent);
+  }
 
-      const convertedBody = await applyIconToElement(chatBody);
-      chatBody.replaceWith(convertedBody);
-    } catch (_) {}
+  async newChatHandler(messageBody: Element) {
+    if (messageBody.matches(`.${CLASSNAMES.PROCESSED}`)) return;
+    messageBody.classList.add(CLASSNAMES.PROCESSED);
+
+    Array.from(messageBody.children).forEach((chatFragment) => {
+      if (
+        !chatFragment.matches(TWITCH_SELECTORS.chatText) ||
+        chatFragment.matches(TWITCH_SELECTORS.chatThirdPartyEmote)
+      )
+        return;
+
+      chatFragment.replaceWith(...replaceTextToElements(chatFragment));
+    });
   }
 }
 

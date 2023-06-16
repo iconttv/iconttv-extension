@@ -12,14 +12,15 @@ function Settings() {
 }
 
 export function mountSettings(element: Element) {
-  if (document.getElementById(ICONTTV_SETTING_ID)) return;
+  return;
+  // if (document.getElementById(ICONTTV_SETTING_ID)) return;
 
-  const app = document.createElement('div');
-  app.id = ICONTTV_SETTING_ID;
-  element.appendChild(app);
+  // const app = document.createElement('div');
+  // app.id = ICONTTV_SETTING_ID;
+  // element.appendChild(app);
 
-  const root = createRoot(app);
-  root.render(<Settings />);
+  // const root = createRoot(app);
+  // root.render(<Settings />);
 }
 
 export function unmountSettings() {

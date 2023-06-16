@@ -6,7 +6,8 @@ const TWITCH_SELECTORS = {
   chatScroll: `div[data-a-target='chat-scroller'] .simplebar-scroll-content`,
   chatThirdPartyEmote: `.bttv-emote, .seventv-emote-box`,
 
-  chatInputEditor: `.rich-input-container`,
+  // chatInputEditor: `.rich-input-container`,
+  chatInputEditor: `textarea[data-a-target="chat-input"], div[data-a-target="chat-input"]`,
 
   chatButtonContainer: `[data-test-selector="chat-input-buttons-container"]`,
   chatSettingButton: `[data-a-target="chat-settings"]`,

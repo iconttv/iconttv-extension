@@ -11,6 +11,10 @@ Iconttv browser extension source code
 
 [**Firefox** extension](https://addons.mozilla.org/en-US/firefox/addon/%ED%8A%B8%EC%9C%84%EC%B9%98-%EC%BB%A4%EC%8A%A4%ED%85%80-%EC%95%84%EC%9D%B4%EC%BD%98-%EC%84%A0%ED%83%9D%EA%B8%B0/)
 
+## 2.0.4
+- 아이콘 선택기에서 `←`, `→`, `↑`, `↓`으로 탐색, `Tab` 혹은 `Enter`로 선택하도록 기능 개선 
+- 채팅 입력창 focus가 동작하지 않던 버그 수정 
+
 
 ## 2.0.3
 - 성능 및 동작 개선

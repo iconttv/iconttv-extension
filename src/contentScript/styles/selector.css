@@ -56,12 +56,6 @@
   background: inherit;
 }
 
-.iconttv-selector-list {
-  display: flex;
-  flex-wrap: wrap;
-  overflow: auto;
-}
-
 img.iconttv-selector-item {
   margin: 5px;
   border-right: 1px solid gray;

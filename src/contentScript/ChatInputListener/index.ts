@@ -175,8 +175,13 @@ class ChatInputListener extends SafeEventEmitter {
     const editorComponent = this.__getEditorComponent();
     if (!editorComponent) return;
 
-    editorComponent.focus();
-    editorComponent.setSelectionRange(textLength);
+    /**
+     * setTimeout으로 감싸야 focus가 동작함
+     */
+    setTimeout(() => {
+      editorComponent.focus();
+      editorComponent.setSelectionRange(textLength);
+    }, 0);
   }
 }
 

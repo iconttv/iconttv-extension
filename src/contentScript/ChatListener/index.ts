@@ -8,7 +8,10 @@ import { replaceTextToElements } from './iconApply';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 import { icon2element } from './iconApply';
 import { CLASSNAMES } from '../utils/classNames';
-import { mountIconSelector, unmountIconSelector } from '../components/IconSelector';
+import {
+  mountIconSelector,
+  unmountIconSelector,
+} from '../components/IconSelector';
 import DOMObserver from '../Observer/DOM';
 
 const DEVELOPERS = ['drowsyprobius'];
@@ -75,7 +78,7 @@ class ChatListener extends SafeEventEmitter {
       DOMObserver.activate();
       /** 선택기를 위해서 입력 감시 설정 */
     } catch (e) {
-      this.status = 'disabled'
+      this.status = 'disabled';
       DOMObserver.deactivate();
       unmountIconSelector();
       Logger.debug(`${this.streamerId}'s icon does not exists.`);

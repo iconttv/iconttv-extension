@@ -24,7 +24,6 @@ function formManifest() {
       default_title: 'Iconttv',
       default_popup: 'popup.html',
     },
-    permissions: ['storage'],
     content_scripts: [
       {
         matches: ['*://*.twitch.tv/*'],

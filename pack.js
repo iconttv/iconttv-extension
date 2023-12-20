@@ -10,6 +10,7 @@ try {
   const filename = isFirefox
     ? `${APP_NAME}-firefox-v${VERSION}-${VERSION_NAME}.zip`
     : `${APP_NAME}-chrome-v${VERSION}-${VERSION_NAME}.zip`;
+    
   const zip = new AdmZip();
   zip.addLocalFolder('build');
   if (!existsSync(outdir)) {

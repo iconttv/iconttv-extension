@@ -1,7 +1,7 @@
 export {};
 
 /**
- * 개발 시에 vscode에서 타입 인식하기 위함.
+ * specify type for autocomplete variables in development.
  */
 declare global {
   interface Window {

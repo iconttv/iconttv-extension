@@ -4,6 +4,11 @@ Iconttv browser extension source code
 
 구 twitch-icon-selector
 
+## 개발 일정
+
+- 2023.12.21
+
+베타 기간 중에는 주소창에 스트리머 이름이 아니라 해시가 들어가므로 [치지직 (CHZZK)](https://chzzk.naver.com/) 정식 출시 이후 개발 예정
 
 ## Install
 
@@ -12,11 +17,12 @@ Iconttv browser extension source code
 [**Firefox** extension](https://addons.mozilla.org/en-US/firefox/addon/%ED%8A%B8%EC%9C%84%EC%B9%98-%EC%BB%A4%EC%8A%A4%ED%85%80-%EC%95%84%EC%9D%B4%EC%BD%98-%EC%84%A0%ED%83%9D%EA%B8%B0/)
 
 ## 2.0.4
-- 아이콘 선택기에서 `←`, `→`, `↑`, `↓`으로 탐색, `Tab` 혹은 `Enter`로 선택하도록 기능 개선 
-- 채팅 입력창 focus가 동작하지 않던 버그 수정 
 
+- 아이콘 선택기에서 `←`, `→`, `↑`, `↓`으로 탐색, `Tab` 혹은 `Enter`로 선택하도록 기능 개선
+- 채팅 입력창 focus가 동작하지 않던 버그 수정
 
 ## 2.0.3
+
 - 성능 및 동작 개선
 - 타 플러그인과의 호환성 개선
 
@@ -30,10 +36,9 @@ Iconttv browser extension source code
 - 익스텐션 아이콘 클릭 시 전체 목록 페이지로 이동
 - 설정 페이지 없음
 
-- 선택기에서 아이콘 클릭시 `~`가 적용되지 않던 버그 수정 
+- 선택기에서 아이콘 클릭시 `~`가 적용되지 않던 버그 수정
 - 과도한 이벤트로 인한 성능 저하 수정
 - 하이퍼링크와 텍스트 사이의 공백이 유지되지 않던 버그 수정
-
 
 ### Limitations
 

@@ -2,6 +2,10 @@
   "name": "iconttv",
   "description": "iconttv extension",
   "private": true,
+  "engines" : { 
+    "node" : ">=20.0.0",
+    "npm" : ">=10.0.0"
+  },
   "scripts": {
     "manifest": "cross-env BROWSER_ENV=chrome node manifest.js",
     "dev": "rm -rf ./build && npm run manifest && webpack --mode=development --watch --config config/webpack.config.js",

@@ -37,7 +37,7 @@ function formManifest() {
 
   if (isFirefox) {
     /**
-     * Manifect Version 2
+     * Manifest Version 2
      */
     manifest['browser_specific_settings'] = {
       gecko: {
@@ -49,7 +49,7 @@ function formManifest() {
     };
   } else {
     /**
-     * Manifect Version 3
+     * Manifest Version 3
      */
 
     manifest['background'] = {

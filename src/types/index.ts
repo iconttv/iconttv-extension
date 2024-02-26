@@ -1,3 +1,5 @@
+import Iconttv from '../contentScript/Iconttv';
+
 export {};
 
 /**
@@ -5,7 +7,7 @@ export {};
  */
 declare global {
   interface Window {
-    __iconttv?: boolean;
-    iconttv?: any;
+    __iconttv: boolean;
+    iconttv: Iconttv;
   }
 }

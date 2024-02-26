@@ -1,4 +1,5 @@
 export type TwitchType = 'live' | 'popout' | 'vod' | 'clip';
+export type ChzzkType = 'live' | 'popout';
 
 /**
  * 근데 지금 observer 쓰는 방식에서 중요한가?
@@ -18,7 +19,7 @@ function getTwitchType(href: string): TwitchType | void {
   return;
 }
 
-export function getStreamerId(href: string): string {
+function getTwitchStreamerId(href: string): string {
   const hrefType = getTwitchType(href);
 
   switch (hrefType) {
@@ -51,5 +52,24 @@ export function getStreamerId(href: string): string {
       return href.split('/').pop() ?? '';
     }
   }
+  return '';
+}
+
+function getChzzkStreamerId(href: string): string {
+  const matchGroups = href.match(/[a-f0-9]{32}/);
+  if (!matchGroups) return '';
+  return matchGroups[0];
+}
+
+export function getStreamerId(href: string): string {
+  console.dir(window.iconttv);
+  if (window.iconttv.streamPlatform === 'twitch') {
+    return getTwitchStreamerId(href);
+  }
+
+  if (window.iconttv.streamPlatform === 'chzzk') {
+    return getChzzkStreamerId(href);
+  }
+
   return '';
 }

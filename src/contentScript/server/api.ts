@@ -27,7 +27,9 @@ export const emptyIconListResponse = {
 };
 
 export async function getIconList(streamerId: string): Promise<ServerIconList> {
-  const res = await fetchWrapper(`${API_ENDPOINT}/list/${streamerId}`);
+  const res = await fetchWrapper(
+    `${API_ENDPOINT}/list/by?platform=${window.iconttv.streamPlatform}&streamer=${streamerId}`
+  );
   const resJson = await res.json();
   if (res.status !== 200) {
     throw new Error(`[${res.status}] ${JSON.stringify(resJson)}`);

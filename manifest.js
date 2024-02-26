@@ -26,7 +26,7 @@ function formManifest() {
     },
     content_scripts: [
       {
-        matches: ['*://*.twitch.tv/*'],
+        matches: ['*://*.twitch.tv/*', '*://*.chzzk.naver.com/*'],
         run_at: 'document_end',
         js: ['iconttv.js'],
         css: ['iconttv.css'],

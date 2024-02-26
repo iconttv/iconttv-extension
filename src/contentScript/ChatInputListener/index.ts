@@ -1,5 +1,5 @@
 import SafeEventEmitter from '@metamask/safe-event-emitter';
-import TWITCH_SELECTORS from '../utils/selectors';
+// import TWITCH_SELECTORS from '../utils/selectors';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 
 export const ChatInputListenerEventTypes = {
@@ -63,7 +63,7 @@ class ChatInputListener extends SafeEventEmitter {
     if (!window.iconttv) return null;
 
     this.inputComponent = this.__getReactComponent(
-      TWITCH_SELECTORS.chatInput,
+      window.iconttv.domSelector.chatInput,
       (elem) =>
         elem.memoizedProps &&
         elem.memoizedProps.componentType != null &&
@@ -78,7 +78,7 @@ class ChatInputListener extends SafeEventEmitter {
     if (!window.iconttv) return null;
 
     this.editorComponent = this.__getReactComponent(
-      TWITCH_SELECTORS.chatInput,
+      window.iconttv.domSelector.chatInput,
       (elem) => elem.stateNode?.state?.slateEditor != null
     )?.stateNode;
 
@@ -106,7 +106,9 @@ class ChatInputListener extends SafeEventEmitter {
    * input react component에 리스너 추가하는게 제일 나은 것 같음
    */
   getInputValue(): string {
-    const chatInput = document.querySelector(TWITCH_SELECTORS.chatInput);
+    const chatInput = document.querySelector(
+      window.iconttv.domSelector.chatInput
+    );
     if (!chatInput) return '';
     return (chatInput as HTMLDivElement).innerText;
   }

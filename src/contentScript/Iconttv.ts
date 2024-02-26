@@ -1,37 +1,47 @@
 import Logger from '../Logger';
-import TWITCH_SELECTORS from './utils/selectors';
 import DOMObserver from './Observer/DOM';
 import URLObserver from './Observer/URL';
 import ChatListener, { ChatListenerEventTypes } from './ChatListener';
 import { mountSettings } from './components/Settings';
+import { DOMSelector } from './constants/selector';
+
+type StreamPlatform = 'twitch' | 'chzzk';
 
 class Iconttv {
-  static #instance: Iconttv;
+  domSelector: DOMSelector;
+  streamPlatform: StreamPlatform;
 
-  constructor() {
-    if (Iconttv.#instance) return Iconttv.#instance;
-    Iconttv.#instance = this;
+  constructor(domSelector: DOMSelector, platform: StreamPlatform) {
+    Logger.time('Iconttv Init');
+    this.domSelector = domSelector;
+    this.streamPlatform = platform;
+
+    if (window.iconttv) {
+      Logger.timeEnd('Iconttv Init');
+      return window.iconttv;
+    }
+    window.iconttv = this;
 
     ChatListener.emit(ChatListenerEventTypes.CHANGE_STREAMER_ID);
 
     /** Observer 설정 */
-    DOMObserver.on(TWITCH_SELECTORS.chatBody, (node) => {
-      ChatListener.emit(ChatListenerEventTypes.NEW_CHAT, node);
-    });
-
     URLObserver.on(() => {
       ChatListener.emit(ChatListenerEventTypes.CHANGE_STREAMER_ID);
     });
 
-    DOMObserver.on(TWITCH_SELECTORS.chatInputEditor, () => {
+    DOMObserver.on(this.domSelector.chatBody, (node) => {
+      ChatListener.emit(ChatListenerEventTypes.NEW_CHAT, node);
+    });
+
+    DOMObserver.on(this.domSelector.chatInputEditor, () => {
       ChatListener.emit(ChatListenerEventTypes.CHAT_MOUNT);
     });
 
-    DOMObserver.on(TWITCH_SELECTORS.chatSettingContainer, (node: Element) => {
+    DOMObserver.on(this.domSelector.chatSettingContainer, (node: Element) => {
       mountSettings(node);
     });
 
-    Logger.log('loaded');
+    Logger.timeEnd('Iconttv Init');
   }
 }
 

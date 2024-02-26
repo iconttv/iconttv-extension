@@ -1,16 +1,20 @@
-import React, {  useEffect,  useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Box, Stack } from '@mui/material';
-import TWITCH_SELECTORS from "../utils/selectors";
-import { addTippyTo, destroyTippyFrom, hideAllTippy, waitFor } from "../utils/elements";
+import {
+  addTippyTo,
+  destroyTippyFrom,
+  hideAllTippy,
+  waitFor,
+} from '../utils/elements';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
-import { ServerIconList } from "../../common/types";
-import { AppIconImage, getIconUrl } from "../server/api";
-import { searchIcon } from "../ChatListener/iconSearch";
-import ChatInputListener from "../ChatInputListener";
-import { MAGIC_CHAR } from "../ChatListener/iconApply";
+import { ServerIconList } from '../../common/types';
+import { AppIconImage, getIconUrl } from '../server/api';
+import { searchIcon } from '../ChatListener/iconSearch';
+import { MAGIC_CHAR } from '../ChatListener/iconApply';
 
 import '../styles/selector.css';
+import ChatInputListener from '../ChatInputListener';
 
 const ICONTTV_SELECTOR_ID = 'iconttv-selector-root';
 const ICON_SELECTED_CLASSNAME = 'iconttv-item-selected';
@@ -30,94 +34,104 @@ const IconSelector: React.FC = () => {
   const defaultIconList = (
     LocalStorage.cache.get(STORAGE_KEY.CACHE.SERVER_ICON_LIST) as ServerIconList
   ).icons;
-  
+
   const listRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef(-1);
   const chatInputRef = useRef<HTMLDivElement | null>(null);
   const isOpenRef = useRef(false);
   const chatInputTextRef = useRef<string | null>(null);
-  const [activeIconIndexList, setActiveIconIndexList] = useState<number[]>(defaultIconList.map((_, i) => i));
+  const [activeIconIndexList, setActiveIconIndexList] = useState<number[]>(
+    defaultIconList.map((_, i) => i)
+  );
 
   const getActiveIconElements = () => {
     if (listRef.current === null) return [];
-    return Array.from(listRef.current.children)
-      .filter(element => !element.classList.contains(ICON_HIDE_CLASSNAME));
-  }
+    return Array.from(listRef.current.children).filter(
+      (element) => !element.classList.contains(ICON_HIDE_CLASSNAME)
+    );
+  };
 
   const getNumberOfColumns = () => {
     if (!listRef.current) return 0;
     /** firstElement로 하면 선택된 항목이 확대된 상태라 정확하지 않은 값 계산됨 */
     const lastElementChild = listRef.current.lastElementChild;
     if (lastElementChild === null) return 0;
-    
+
     const iconStyle = window.getComputedStyle(lastElementChild);
     const listContainerWidth = listRef.current.offsetWidth;
-    const iconWidth = parseFloat(iconStyle.width) + parseFloat(iconStyle.marginLeft) + parseFloat(iconStyle.marginRight);
+    const iconWidth =
+      parseFloat(iconStyle.width) +
+      parseFloat(iconStyle.marginLeft) +
+      parseFloat(iconStyle.marginRight);
 
     return Math.floor(listContainerWidth / iconWidth);
-  }
+  };
 
   const closeSelector = () => {
     if (!isOpenRef.current) return;
 
     if (listRef.current && cursorRef.current !== -1) {
-      const children = Array.from(listRef.current.children)
-        .filter(element => !element.classList.contains(ICON_HIDE_CLASSNAME));
+      const children = Array.from(listRef.current.children).filter(
+        (element) => !element.classList.contains(ICON_HIDE_CLASSNAME)
+      );
 
       const current = children[cursorRef.current];
       current.classList.remove(ICON_SELECTED_CLASSNAME);
       destroyTippyFrom(current);
     }
-    
+
     chatInputTextRef.current = null;
-    cursorRef.current = -1
+    cursorRef.current = -1;
     isOpenRef.current = false;
     setActiveIconIndexList([]);
-    hideAllTippy({ duration: 0 })
-  }
+    hideAllTippy({ duration: 0 });
+  };
 
   const openSelector = (iconIndexList?: number[]) => {
     setActiveIconIndexList(iconIndexList ? iconIndexList : searchIcon(''));
-    const inputText = chatInputRef.current === null ? '' : chatInputRef.current.innerText;
+    const inputText =
+      chatInputRef.current === null ? '' : chatInputRef.current.innerText;
     chatInputTextRef.current = inputText.trim();
     isOpenRef.current = true;
     /** 텍스트 입력창에 포커스 */
     ChatInputListener.setFocus(chatInputTextRef.current.length);
-  }
+  };
 
   const onkeydownHandler = (event: Event) => {
     /** 선택창 열려있을 때에만 수행 */
     if (isOpenRef.current !== true) return;
 
-    const inputText = (event.target as HTMLDivElement).innerText
+    const inputText = (event.target as HTMLDivElement).innerText;
     const inputKey = (event as KeyboardEvent).key || '';
 
-    if ("__betterttv" in window && COMMAND_KEYS.includes(inputKey)) {
+    if ('__betterttv' in window && COMMAND_KEYS.includes(inputKey)) {
       event.preventDefault();
       event.stopImmediatePropagation();
       event.stopPropagation();
       setTimeout(() => {
         /** bttv와 충돌이 있어서 딜레이없이 설정할 수 없음 */
         if (chatInputTextRef.current !== null) {
-          ChatInputListener.setInputValue(chatInputTextRef.current)
+          ChatInputListener.setInputValue(chatInputTextRef.current);
         }
       }, 60);
     }
     // chatInputTextRef.current = inputText.trim();
-    
 
     switch (inputKey) {
-      case ("Enter"): {
+      case 'Enter': {
         if (listRef.current && cursorRef.current !== -1) {
           /** 선택항목이 있으면 자동으로 아이콘 입력 */
           const activeIconElements = getActiveIconElements();
-        
+
           const current = activeIconElements[cursorRef.current];
-          const currentKeyword = current.getAttribute('alt') || "";
+          const currentKeyword = current.getAttribute('alt') || '';
 
           // alt 값에는 `~`가 포함되어 있어서 keywordStartIdx에 1을 더할 필요 없음.
           const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR);
-          const newInputText = `${inputText.slice(0, keywordStartIdx)}${currentKeyword}`;
+          const newInputText = `${inputText.slice(
+            0,
+            keywordStartIdx
+          )}${currentKeyword}`;
 
           ChatInputListener.setInputValue(newInputText);
         }
@@ -129,29 +143,37 @@ const IconSelector: React.FC = () => {
         /**
          * 엔터 입력하면 자동으로 끝까지
          */
-        const chatScrollBar = document.querySelector(TWITCH_SELECTORS.chatScroll);
+        if (window.iconttv.domSelector.chatScrollableContainer === undefined)
+          return;
+        const chatScrollBar = document.querySelector(
+          window.iconttv.domSelector.chatScrollableContainer
+        );
         if (chatScrollBar) {
           chatScrollBar.scrollTop = chatScrollBar.scrollHeight;
         }
         return;
       }
-        
-      case (" "): {
+
+      case ' ': {
         closeSelector();
         return;
       }
 
-      case ("Backspace"): {
+      case 'Backspace': {
         if (inputText.endsWith('~') || inputText.trim().length === 0) {
           closeSelector();
         }
         return;
       }
-      
-      case ("ArrowRight"): {
+
+      case 'ArrowRight': {
         const activeIconElements = getActiveIconElements();
         const currentCursor = cursorRef.current;
-        const nextCursor = getNextCursor(currentCursor, activeIconElements.length, 1);
+        const nextCursor = getNextCursor(
+          currentCursor,
+          activeIconElements.length,
+          1
+        );
 
         if (currentCursor !== -1) {
           const current = activeIconElements[currentCursor];
@@ -163,18 +185,22 @@ const IconSelector: React.FC = () => {
         next.classList.add(ICON_SELECTED_CLASSNAME);
         addTippyTo(next);
 
-        next.scrollIntoView({ block: "center", inline: "nearest" });
+        next.scrollIntoView({ block: 'center', inline: 'nearest' });
 
         cursorRef.current = nextCursor;
         return;
       }
-        
-      case ("ArrowLeft"): {
+
+      case 'ArrowLeft': {
         if (cursorRef.current === -1) return;
         const activeIconElements = getActiveIconElements();
         const currentCursor = cursorRef.current;
-        const nextCursor = getNextCursor(currentCursor, activeIconElements.length, -1);
-        
+        const nextCursor = getNextCursor(
+          currentCursor,
+          activeIconElements.length,
+          -1
+        );
+
         const current = activeIconElements[currentCursor];
         const next = activeIconElements[nextCursor];
 
@@ -184,18 +210,22 @@ const IconSelector: React.FC = () => {
         destroyTippyFrom(current);
         addTippyTo(next);
 
-        next.scrollIntoView({ block: "center", inline: "nearest" });
+        next.scrollIntoView({ block: 'center', inline: 'nearest' });
 
         cursorRef.current = nextCursor;
         return;
       }
-        
-      case ("ArrowUp"): {
+
+      case 'ArrowUp': {
         if (cursorRef.current === -1) return;
         const activeIconElements = getActiveIconElements();
         const currentCursor = cursorRef.current;
-        const nextCursor = getNextCursor(currentCursor, activeIconElements.length, -1 * getNumberOfColumns());
-          
+        const nextCursor = getNextCursor(
+          currentCursor,
+          activeIconElements.length,
+          -1 * getNumberOfColumns()
+        );
+
         const current = activeIconElements[currentCursor];
         const next = activeIconElements[nextCursor];
 
@@ -205,18 +235,22 @@ const IconSelector: React.FC = () => {
         destroyTippyFrom(current);
         addTippyTo(next);
 
-        next.scrollIntoView({ block: "center", inline: "nearest" });
+        next.scrollIntoView({ block: 'center', inline: 'nearest' });
 
         cursorRef.current = nextCursor;
         return;
       }
-        
-      case ("ArrowDown"): {
+
+      case 'ArrowDown': {
         if (cursorRef.current === -1) return;
         const activeIconElements = getActiveIconElements();
         const currentCursor = cursorRef.current;
-        const nextCursor = getNextCursor(currentCursor, activeIconElements.length, getNumberOfColumns());
-        
+        const nextCursor = getNextCursor(
+          currentCursor,
+          activeIconElements.length,
+          getNumberOfColumns()
+        );
+
         const current = activeIconElements[currentCursor];
         const next = activeIconElements[nextCursor];
 
@@ -226,7 +260,7 @@ const IconSelector: React.FC = () => {
         destroyTippyFrom(current);
         addTippyTo(next);
 
-        next.scrollIntoView({ block: "center", inline: "nearest" });
+        next.scrollIntoView({ block: 'center', inline: 'nearest' });
 
         cursorRef.current = nextCursor;
         return;
@@ -235,9 +269,9 @@ const IconSelector: React.FC = () => {
   };
 
   const onkeyupHandler = (event: Event) => {
-    const inputText = (event.target as HTMLDivElement).innerText
+    const inputText = (event.target as HTMLDivElement).innerText;
     const inputKey = (event as KeyboardEvent).key || '';
-      
+
     if (COMMAND_KEYS.includes(inputKey) && isOpenRef.current === true) {
       event.stopImmediatePropagation();
       event.stopPropagation();
@@ -245,29 +279,32 @@ const IconSelector: React.FC = () => {
     }
 
     switch (inputKey) {
-      case ("Tab"): {
+      case 'Tab': {
         if (!listRef.current || cursorRef.current === -1) return;
         const activeIconElements = getActiveIconElements();
-        
+
         const current = activeIconElements[cursorRef.current];
-        const currentKeyword = current.getAttribute('alt') || "";
+        const currentKeyword = current.getAttribute('alt') || '';
 
         // alt 값에는 `~`가 포함되어 있어서 keywordStartIdx에 1을 더할 필요 없음.
         const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR);
-        const newInputText = `${inputText.slice(0, keywordStartIdx)}${currentKeyword}`;
+        const newInputText = `${inputText.slice(
+          0,
+          keywordStartIdx
+        )}${currentKeyword}`;
 
         ChatInputListener.setInputValue(newInputText);
 
         closeSelector();
         return;
       }
-        
-      case ("Escape"): {
+
+      case 'Escape': {
         closeSelector();
         return;
       }
-        
-      case (MAGIC_CHAR): {
+
+      case MAGIC_CHAR: {
         openSelector();
         return;
       }
@@ -293,9 +330,9 @@ const IconSelector: React.FC = () => {
          */
         const keyword = inputText.slice(keywordStartIdx + 1);
         if (keyword.includes(' ')) return;
-        
+
         /**
-         * 아이콘 검색 수행 
+         * 아이콘 검색 수행
          */
         const searchResult = searchIcon(keyword);
         openSelector(searchResult);
@@ -317,8 +354,9 @@ const IconSelector: React.FC = () => {
     setActiveIconIndexList(defaultIconList.map((_, i) => i));
 
     if (!document.getElementById('iconttv-picker')) {
-      waitFor(() => document.querySelector(TWITCH_SELECTORS.defaultEmotePicker))
-      .then(emotePicker => {
+      waitFor(() =>
+        document.querySelector(window.iconttv.domSelector.defaultEmotePicker)
+      ).then((emotePicker) => {
         if (!emotePicker) return;
         const emotePickerParent = emotePicker.parentElement;
 
@@ -327,7 +365,7 @@ const IconSelector: React.FC = () => {
         button.className = emotePicker.className;
         button.setAttribute('aria-label', '디시콘 선택창');
         button.setAttribute('data-a-target', 'iconttv-picker-button');
-        button.id = 'iconttv-picker'
+        button.id = 'iconttv-picker';
         button.style.width = '30px';
         button.style.height = '30px';
         button.onclick = () => {
@@ -336,7 +374,7 @@ const IconSelector: React.FC = () => {
           } else {
             openSelector();
           }
-        }
+        };
 
         buttonImg.style.backgroundImage = `url(${AppIconImage()})`;
         buttonImg.style.backgroundSize = 'contain';
@@ -345,19 +383,22 @@ const IconSelector: React.FC = () => {
         button.appendChild(buttonImg);
 
         emotePickerParent?.insertBefore(button, emotePickerParent.firstChild);
-        
+
         /** 아이콘 추가해서 입력 창 크기 조절 */
-        const chatInput = document.querySelector(TWITCH_SELECTORS.chatInput) as HTMLDivElement;
+        const chatInput = document.querySelector(
+          window.iconttv.domSelector.chatInput
+        ) as HTMLDivElement;
         if (!chatInput) return;
-        const prevValue = parseFloat(chatInput.style.paddingRight)
+        const prevValue = parseFloat(chatInput.style.paddingRight);
         if (Number.isNaN(prevValue)) return;
         chatInput.style.paddingRight = `${prevValue + 1}rem`;
-      })
+      });
     }
-    
-    waitFor(() => document.querySelector(TWITCH_SELECTORS.chatInput))
-    .then(chatInput => {
-      chatInputRef.current = chatInput as HTMLDivElement
+
+    waitFor(() =>
+      document.querySelector(window.iconttv.domSelector.chatInput)
+    ).then((chatInput) => {
+      chatInputRef.current = chatInput as HTMLDivElement;
       chatInputRef.current.onkeyup = onkeyupHandler;
 
       /**
@@ -367,15 +408,15 @@ const IconSelector: React.FC = () => {
     });
 
     return () => {
-      waitFor(() => document.querySelector(TWITCH_SELECTORS.chatInput))
-        .then(chatInput => {
-          chatInputRef.current = chatInput as HTMLDivElement
-          chatInputRef.current.onkeyup = () => { };
-          chatInputRef.current.onkeydown = () => { };
+      waitFor(() =>
+        document.querySelector(window.iconttv.domSelector.chatInput)
+      ).then((chatInput) => {
+        chatInputRef.current = chatInput as HTMLDivElement;
+        chatInputRef.current.onkeyup = () => {};
+        chatInputRef.current.onkeydown = () => {};
       });
-    }
+    };
   }, []);
-
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -385,59 +426,72 @@ const IconSelector: React.FC = () => {
       const iconIdx = Number(child.getAttribute('data-icon-idx') || -1);
 
       if (activeIconIndexList.includes(iconIdx)) {
-        child.classList.remove(ICON_HIDE_CLASSNAME)        
+        child.classList.remove(ICON_HIDE_CLASSNAME);
       } else {
-        child.classList.add(ICON_HIDE_CLASSNAME)
+        child.classList.add(ICON_HIDE_CLASSNAME);
         destroyTippyFrom(child);
       }
     }
+  }, [activeIconIndexList]);
 
-  }, [activeIconIndexList])
+  return (
+    <Box
+      className="iconttv-selector-wrapper"
+      sx={{
+        display:
+          isOpenRef.current && activeIconIndexList.length > 0
+            ? 'block'
+            : 'none',
+      }}
+    >
+      <Stack
+        className="iconttv-selector-list"
+        direction="row"
+        flexWrap="wrap"
+        ref={listRef}
+      >
+        {defaultIconList.map((icon, idx) => (
+          <img
+            width={40}
+            height={40}
+            key={`${idx}-${icon.keywords[0]}`}
+            className={`iconttv-selector-item iconttv-common lazy`}
+            src={`${getIconUrl(icon.thumbnailUri)}`}
+            alt={`~${icon.keywords[0]}`}
+            loading="lazy"
+            decoding="async"
+            data-tippy-content={`~${icon.keywords[0]}`}
+            data-icon-idx={idx}
+            onMouseOver={(event) => {
+              addTippyTo(event.target as Element);
+            }}
+            onMouseOut={(event) => {
+              destroyTippyFrom(event.target as Element);
+            }}
+            onClick={() => {
+              if (!chatInputRef.current) return;
 
-
-  return <Box className='iconttv-selector-wrapper' sx={{
-    display: (isOpenRef.current && activeIconIndexList.length > 0) ? 'block' : 'none'
-  }}>
-    <Stack className="iconttv-selector-list" direction='row' flexWrap='wrap' ref={listRef}>
-      {defaultIconList.map((icon, idx) => (
-
-        <img
-          width={40}
-          height={40}
-          key={`${idx}-${icon.keywords[0]}`}
-          className={`iconttv-selector-item iconttv-common lazy`}
-          src={`${getIconUrl(icon.thumbnailUri)}`}
-          alt={`~${icon.keywords[0]}`}
-          loading="lazy"
-          decoding="async"
-          data-tippy-content={`~${icon.keywords[0]}`}
-          data-icon-idx={idx}
-          onMouseOver={(event) => {
-            addTippyTo(event.target as Element);
-          }}
-          onMouseOut={(event) => {
-            destroyTippyFrom(event.target as Element);
-          }}
-          onClick={() => {
-            if (!chatInputRef.current) return;
-
-            const inputText = chatInputRef.current.innerText;
-            if (inputText.trim().length === 0) {
-              ChatInputListener.setInputValue(`~${icon.keywords[0]}`)
-            } else {
-              const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR);
-              ChatInputListener.setInputValue(
-                keywordStartIdx === -1 ? `${inputText}~${icon.keywords[0]}` : `${inputText.slice(0, keywordStartIdx + 1)}${icon.keywords[0]}`
-              )
-            }
-            closeSelector()
-          }}
-        />
-        
-      ))}
-    </Stack> 
-  </Box>
-}
+              const inputText = chatInputRef.current.innerText;
+              if (inputText.trim().length === 0) {
+                ChatInputListener.setInputValue(`~${icon.keywords[0]}`);
+              } else {
+                const keywordStartIdx = inputText.lastIndexOf(MAGIC_CHAR);
+                ChatInputListener.setInputValue(
+                  keywordStartIdx === -1
+                    ? `${inputText}~${icon.keywords[0]}`
+                    : `${inputText.slice(0, keywordStartIdx + 1)}${
+                        icon.keywords[0]
+                      }`
+                );
+              }
+              closeSelector();
+            }}
+          />
+        ))}
+      </Stack>
+    </Box>
+  );
+};
 
 export function mountIconSelector(element: Element) {
   if (document.getElementById(ICONTTV_SELECTOR_ID)) return;
@@ -448,7 +502,7 @@ export function mountIconSelector(element: Element) {
   element.appendChild(app);
 
   const root = createRoot(app);
-  root.render(<IconSelector />)
+  root.render(<IconSelector />);
 
   return app;
 }

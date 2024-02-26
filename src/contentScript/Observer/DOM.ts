@@ -1,12 +1,12 @@
 import Logger from '../../Logger';
-import { TwitchSelectors } from '../utils/selectors';
+import { DOMSelectorValue } from '../constants/selector';
 
 class DOMObserver {
   static #instance: DOMObserver;
 
   isActivate!: boolean;
   observer!: MutationObserver;
-  callbacks!: Partial<Record<TwitchSelectors, ((node: Element) => void)[]>>;
+  callbacks!: Partial<Record<DOMSelectorValue, ((node: Element) => void)[]>>;
 
   constructor() {
     if (DOMObserver.#instance) return DOMObserver.#instance;
@@ -24,7 +24,7 @@ class DOMObserver {
         const addedElements = Array.from(addedNodes) as Element[];
 
         for (const selectorString in this.callbacks) {
-          const selector = <TwitchSelectors>selectorString;
+          const selector = <DOMSelectorValue>selectorString;
           addedElements
             .filter(
               (element) => 'matches' in element && element.matches(selector)
@@ -50,12 +50,12 @@ class DOMObserver {
     });
   }
 
-  on(selector: TwitchSelectors, callback: (node: Element) => void) {
+  on(selector: DOMSelectorValue, callback: (node: Element) => void) {
     const prev = this.callbacks[selector] ?? [];
     this.callbacks[selector] = [...prev, callback];
   }
 
-  off(selector: TwitchSelectors, callback: (node: Element) => void) {
+  off(selector: DOMSelectorValue, callback: (node: Element) => void) {
     const prev = this.callbacks[selector] ?? [];
     this.callbacks[selector] = prev.filter((cb) => cb !== callback);
   }

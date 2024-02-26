@@ -2,7 +2,6 @@ import Logger from '../../Logger';
 import SafeEventEmitter from '@metamask/safe-event-emitter';
 import { getStreamerId } from '../utils/streamerId';
 import { getIconList } from '../server/api';
-import TWITCH_SELECTORS from '../utils/selectors';
 import { waitFor } from '../utils/elements';
 import { replaceTextToElements } from './iconApply';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
@@ -14,7 +13,8 @@ import {
 } from '../components/IconSelector';
 import DOMObserver from '../Observer/DOM';
 
-const DEVELOPERS = ['drowsyprobius'];
+const TWITCH_DEVELOPERS = ['drowsyprobius'];
+const CHZZK_DEVELOPERS = ['6879642bac6e396a2f80184412acf0d6'];
 
 export const ChatListenerEventTypes = {
   CHANGE_STREAMER_ID: 'change_streamerId',
@@ -46,12 +46,28 @@ class ChatListener extends SafeEventEmitter {
 
   async changeStreamerIdHandler() {
     this.status = 'loading';
+    Logger.log(`changeStreamerIdHandler 1`);
+
     let streamerId = getStreamerId(window.location.href);
+    Logger.log(`changeStreamerIdHandler 2`);
     // if (streamerId === '')
     //   streamerId = ChatInputListener.getStreamerName();
 
     /** For debugging */
-    if (DEVELOPERS.includes(streamerId)) streamerId = 'funzinnu';
+    if (
+      window.iconttv.streamPlatform === 'twitch' &&
+      TWITCH_DEVELOPERS.includes(streamerId)
+    ) {
+      streamerId = 'funzinnu';
+    } else if (
+      window.iconttv.streamPlatform === 'chzzk' &&
+      CHZZK_DEVELOPERS.includes(streamerId)
+    ) {
+      streamerId = '7d4157ae4fddab134243704cab847f23';
+    }
+    Logger.log(`changeStreamerIdHandler 3`);
+
+    Logger.log(`streamerId: ${streamerId}`);
 
     if (this.streamerId === streamerId) return;
     this.streamerId = streamerId;
@@ -59,8 +75,12 @@ class ChatListener extends SafeEventEmitter {
     Logger.debug(`Current Watching Streamer: ${this.streamerId}`);
 
     try {
+      Logger.time('getIconList');
       const serverIconList = await getIconList(this.streamerId);
+      Logger.timeEnd('getIconList');
+      Logger.time('icon2element');
       const keyword2icon = await icon2element(serverIconList.icons);
+      Logger.timeEnd('icon2element');
 
       Logger.debug(`Processing ${this.streamerId}'s icons...`);
 
@@ -89,7 +109,7 @@ class ChatListener extends SafeEventEmitter {
     if (this.status !== 'enabled') return;
 
     const iconSelectorParent = await waitFor(() =>
-      document.querySelector(TWITCH_SELECTORS.iconSelectorParent)
+      document.querySelector(window.iconttv.domSelector.iconSelectorParent)
     );
     if (iconSelectorParent) mountIconSelector(iconSelectorParent);
   }
@@ -100,12 +120,18 @@ class ChatListener extends SafeEventEmitter {
 
     Array.from(messageBody.children).forEach((chatFragment) => {
       if (
-        !chatFragment.matches(TWITCH_SELECTORS.chatText) ||
-        chatFragment.matches(TWITCH_SELECTORS.chatThirdPartyEmote)
+        !chatFragment.matches(window.iconttv.domSelector.chatText) ||
+        chatFragment.matches(window.iconttv.domSelector.chatThirdPartyEmote)
       )
         return;
 
+      Logger.log(`before: ${chatFragment.outerHTML}`);
+      Logger.time(chatFragment.innerHTML);
       chatFragment.replaceWith(...replaceTextToElements(chatFragment));
+      Logger.timeEnd(chatFragment.innerHTML);
+      Logger.log(
+        `after: ${replaceTextToElements(chatFragment).map((i) => i.outerHTML)}`
+      );
     });
   }
 }

@@ -1,9 +1,11 @@
-const TWITCH_SELECTORS = {
+import { DOMSelector } from '.';
+
+export const TWITCH_SELECTOR: DOMSelector = {
   // chatLineMessage: `.chat-line__message`,
   chatBody: `[data-a-target="chat-line-message-body"], .seventv-chat-message-body`,
   chatText: `.text-fragment, .text-token`,
   chatInput: `[data-a-target="chat-input"]`,
-  chatScroll: `div[data-a-target='chat-scroller'] .simplebar-scroll-content`,
+  chatScrollableContainer: `div[data-a-target='chat-scroller'] .simplebar-scroll-content`,
   chatThirdPartyEmote: `.bttv-emote, .seventv-emote-box`,
 
   // chatInputEditor: `.rich-input-container`,
@@ -19,8 +21,3 @@ const TWITCH_SELECTORS = {
   /** parentElement로 상위 컨테이너 가져와야 함 */
   defaultEmotePicker: `[data-a-target="emote-picker-button"]`,
 } as const;
-
-export type TwitchSelectorKeys = keyof typeof TWITCH_SELECTORS;
-export type TwitchSelectors = (typeof TWITCH_SELECTORS)[TwitchSelectorKeys];
-
-export default TWITCH_SELECTORS;

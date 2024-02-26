@@ -1,5 +1,3 @@
-import TWITCH_SELECTORS from '../utils/selectors';
-
 interface Setting {
   name: string;
   options: string | boolean | number;
@@ -15,14 +13,14 @@ const settings: Setting[] = [
   },
 ];
 
-export function insertSetting() {
+export function insertSettingTwitch() {
   const container = document.querySelector(
-    TWITCH_SELECTORS.chatSettingContainer
+    window.iconttv.domSelector.chatSettingContainer
   );
   if (!container) return;
 
   const seperator = container.querySelector(
-    TWITCH_SELECTORS.chatSettingContainerSeperator
+    window.iconttv.domSelector.chatSettingContainerSeperator
   );
   const settingContainerClassName = container.className;
 }

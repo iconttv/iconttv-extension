@@ -6,15 +6,20 @@ Iconttv browser extension source code
 
 ## 개발 일정
 
-- 2023.12.21
+- 2024.02.27
 
-베타 기간 중에는 주소창에 스트리머 이름이 아니라 해시가 들어가므로 [치지직 (CHZZK)](https://chzzk.naver.com/) 정식 출시 이후 개발 예정
+이미지 치환 기능 개발 완료. 선택기 등의 기능은 추후 추가 예정.
 
 ## Install
 
 [**Chromium** extension](https://chrome.google.com/webstore/detail/iconttv/jgpcibjnfdgbllfghmaamafafgkadhpf)
 
 [**Firefox** extension](https://addons.mozilla.org/en-US/firefox/addon/%ED%8A%B8%EC%9C%84%EC%B9%98-%EC%BB%A4%EC%8A%A4%ED%85%80-%EC%95%84%EC%9D%B4%EC%BD%98-%EC%84%A0%ED%83%9D%EA%B8%B0/)
+
+## 2.1.0
+
+- [치지직](https://chzzk.naver.com/) 이미지 치환 기능 지원
+- 현재 치지직에서 이미지 치환 외의 선택기 기능은 동작하지 않음
 
 ## 2.0.4
 

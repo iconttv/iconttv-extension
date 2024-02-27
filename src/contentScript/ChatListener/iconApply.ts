@@ -61,28 +61,34 @@ type ElementWarpperType = 'text' | IconSize;
  */
 function elementWrapper(
   element: Element | string,
+  originTextNode: Element,
   type: ElementWarpperType
 ): Element {
-  const parent = document.createElement(type === 'text' ? 'span' : 'div');
+  const parent = document.createElement(originTextNode.tagName);
+  for (const attribute of originTextNode.attributes) {
+    parent.setAttribute(attribute.name, attribute.value);
+  }
   parent.append(element);
 
   switch (type) {
     case 'text': {
-      parent.classList.add('text-fragment');
-      parent.setAttribute('data-a-target', 'chat-message-text');
       break;
     }
+    // 이미지인 경우 크기 조절 필요하므로 클래스리스트 초기화
     case 'small': {
+      parent.className = '';
       (element as Element).classList.add(CLASSNAMES.ICON.SMALL);
       parent.classList.add(CLASSNAMES.NEWLINE);
       break;
     }
     case 'medium': {
+      parent.className = '';
       (element as Element).classList.add(CLASSNAMES.ICON.MEDIUM);
       parent.classList.add(CLASSNAMES.NEWLINE);
       break;
     }
     case 'large': {
+      parent.className = '';
       (element as Element).classList.add(CLASSNAMES.ICON.LARGE);
       parent.classList.add(CLASSNAMES.NEWLINE);
       break;
@@ -94,6 +100,16 @@ function elementWrapper(
 
 /**
  *
+ * for twitch
+ * ```
+ * <span class="text-fragment" data-a-target="chat-message-text">ㅁㄴㅇㄻㄴㄹㅇ</span>
+ * ```
+ *
+ * for chzzk
+ * ```
+ * <span class="live_chatting_message_text__DyleH" style="color: rgb(217, 176, 79);">~롱파누</span>
+ * ```
+ *
  * @param chatTextSpan TWITCH_SELECTORS.chatText
  * @returns
  */
@@ -104,6 +120,7 @@ export function replaceTextToElements(chatTextSpan: Element): Element[] {
 
   function replaceTags(html: string, iconSizeOption: IconSize): Element[] {
     let isReplaced = false; // 최대 하나만 렌더링 하기
+    // 요소 렌더링하기 위한 임시 요소
     const container = document.createElement('div');
     const children: Element[] = [];
     container.innerHTML = html;
@@ -180,9 +197,11 @@ export function replaceTextToElements(chatTextSpan: Element): Element[] {
                 }
               };
 
-              children.push(elementWrapper(prev, 'text'));
-              children.push(elementWrapper(image, iconSizeOption));
-              children.push(elementWrapper(rest, 'text'));
+              children.push(elementWrapper(prev, chatTextSpan, 'text'));
+              children.push(
+                elementWrapper(image, chatTextSpan, iconSizeOption)
+              );
+              children.push(elementWrapper(rest, chatTextSpan, 'text'));
 
               // if (iconSizeOption !== 'small')
               isReplaced = true;
@@ -192,7 +211,7 @@ export function replaceTextToElements(chatTextSpan: Element): Element[] {
 
           /** 변환된 아이콘이 없으면 기존 텍스트 그대로 반환 */
           if (!isReplaced) {
-            children.push(elementWrapper(textContent, 'text'));
+            children.push(elementWrapper(textContent, chatTextSpan, 'text'));
           }
 
           break;

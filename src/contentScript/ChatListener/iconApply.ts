@@ -162,6 +162,7 @@ export function replaceTextToElements(chatTextSpan: Element): Element[] {
 
               const image = icon.cloneNode() as HTMLImageElement;
               image.onclick = function (event) {
+                event.stopPropagation();
                 ChatInputListener.appendInputValue(
                   (event?.target as HTMLImageElement).alt,
                   true

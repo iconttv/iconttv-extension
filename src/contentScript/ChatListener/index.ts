@@ -46,10 +46,7 @@ class ChatListener extends SafeEventEmitter {
 
   async changeStreamerIdHandler() {
     this.status = 'loading';
-    Logger.log(`changeStreamerIdHandler 1`);
-
     let streamerId = getStreamerId(window.location.href);
-    Logger.log(`changeStreamerIdHandler 2`);
     // if (streamerId === '')
     //   streamerId = ChatInputListener.getStreamerName();
 
@@ -65,9 +62,6 @@ class ChatListener extends SafeEventEmitter {
     ) {
       streamerId = '7d4157ae4fddab134243704cab847f23';
     }
-    Logger.log(`changeStreamerIdHandler 3`);
-
-    Logger.log(`streamerId: ${streamerId}`);
 
     if (this.streamerId === streamerId) return;
     this.streamerId = streamerId;
@@ -118,6 +112,19 @@ class ChatListener extends SafeEventEmitter {
     if (messageBody.matches(`.${CLASSNAMES.PROCESSED}`)) return;
     messageBody.classList.add(CLASSNAMES.PROCESSED);
 
+    if (window.iconttv.streamPlatform === 'chzzk') {
+      /**
+       * chzzk에서는 채팅 너비가 입력한 문자 길이로 고정됨
+       * 마퀴 태그는 너비 전체를 사용해야하므로 스타일 변경
+       */
+      const replaceTagOption = LocalStorage.browser.get(
+        STORAGE_KEY.BROWSER.REPLACE_TAG
+      ) as boolean;
+      if (replaceTagOption) {
+        (messageBody as HTMLElement).style.width = '100%';
+      }
+    }
+
     Array.from(messageBody.children).forEach((chatFragment) => {
       if (
         !chatFragment.matches(window.iconttv.domSelector.chatText) ||
@@ -125,13 +132,7 @@ class ChatListener extends SafeEventEmitter {
       )
         return;
 
-      Logger.log(`before: ${chatFragment.outerHTML}`);
-      Logger.time(chatFragment.innerHTML);
       chatFragment.replaceWith(...replaceTextToElements(chatFragment));
-      Logger.timeEnd(chatFragment.innerHTML);
-      Logger.log(
-        `after: ${replaceTextToElements(chatFragment).map((i) => i.outerHTML)}`
-      );
     });
   }
 }

@@ -9,16 +9,39 @@
   border-top-color: var(--color-background-tooltip);
 }
 
-.tippy-arrow {
-  bottom: 0.3rem !important;
-}
-
-.tippy-content {
+.tippy-box[data-theme~='twitch'] > .tippy-content {
   color: var(--color-text-tooltip);
   padding: 0.5rem !important;
   border-radius: 0.4rem !important;
   font-size: var(--font-size-6) !important;
   font-weight: var(--font-weight-semibold);
+}
+
+/* 치지직 색상은 `스트리머` 툴팁 색상으로 가져옴. 변수가 아니더라 */
+.tippy-box[data-theme~='chzzk'] {
+  margin: 0;
+  padding: 6px 8px;
+  background-color: #dfe2ea;
+  border-radius: 6px !important;
+  box-shadow: 0 7px 10px 0 rgba(0, 0, 0, 0.5), 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0 7px 10px 0 rgba(0, 0, 0, 0.5),
+    0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  z-index: 300;
+}
+
+.tippy-box[data-theme~='chzzk'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #dfe2ea;
+}
+
+.tippy-box[data-theme~='chzzk'] > .tippy-content {
+  color: #000;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.tippy-arrow {
+  bottom: 0.3rem !important;
 }
 
 .hide {

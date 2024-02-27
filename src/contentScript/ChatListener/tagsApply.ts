@@ -51,6 +51,7 @@ export function escapeHTMLTags(text: string): string {
  * fork from https://funzinnu.com/stream/js/chatassist.js
  *
  * []또는 ``` 등으로 표시된 스타일 태그를 변경
+ *
  * 띄어쓰기를 추가해야 제대로 표기될 것이라 생각함.
  *
  * @param text chat message

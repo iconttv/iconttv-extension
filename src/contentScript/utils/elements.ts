@@ -32,7 +32,7 @@ export function addTippyTo(
   const options: Partial<Props> = {
     hideOnClick: true,
     placement: 'top-start',
-    theme: 'twitch',
+    theme: window.iconttv.streamPlatform,
     arrow: true,
     ...optionalProps,
   };

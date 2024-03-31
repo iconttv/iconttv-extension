@@ -10,6 +10,12 @@ Iconttv browser extension source code
 
 이미지 치환 기능 개발 완료. 선택기 등의 기능은 추후 추가 예정.
 
+## Issue
+
+- [ ] 정사각형 이미지가 아닌 경우에도 정사각형으로 표시되는 문제
+- [ ] 치지직 아이콘 선택기 사용 안됨
+
+
 ## Install
 
 [**Chromium** extension](https://chrome.google.com/webstore/detail/iconttv/jgpcibjnfdgbllfghmaamafafgkadhpf)

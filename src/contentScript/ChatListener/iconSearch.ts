@@ -1,4 +1,4 @@
-import { Icon, ServerIconList } from '../../common/types';
+import type { Icon, ServerIconList } from '../../common/types';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 
 /**
@@ -9,7 +9,7 @@ import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
  * @returns keyword가 포함된 모든 아이콘 목록 리턴
  */
 export function searchIcon(keyword: string, includeTags = true): number[] {
-  keyword = keyword.toLowerCase();
+  const lowerKeyword = keyword.toLowerCase();
 
   const icons: Icon[] = (
     LocalStorage.cache.get(STORAGE_KEY.CACHE.SERVER_ICON_LIST) as ServerIconList
@@ -21,7 +21,7 @@ export function searchIcon(keyword: string, includeTags = true): number[] {
     // 키워드 검색
     const keywords = icon.keywords.map((k) => k.toLowerCase());
     for (const key of keywords) {
-      if (key.indexOf(keyword) !== -1) {
+      if (key.indexOf(lowerKeyword) !== -1) {
         result.push(idx);
         match = true;
         break;
@@ -33,7 +33,7 @@ export function searchIcon(keyword: string, includeTags = true): number[] {
       if (match) return;
       const tags = icon.tags.map((t) => t.toLowerCase());
       for (const tag of tags) {
-        if (tag.indexOf(keyword) !== -1) {
+        if (tag.indexOf(lowerKeyword) !== -1) {
           result.push(idx);
           break;
         }

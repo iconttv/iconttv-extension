@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+// biome-ignore lint/style/useImportType: <explanation>
+import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Box, Stack } from '@mui/material';
 import {
@@ -8,7 +10,7 @@ import {
   waitFor,
 } from '../utils/elements';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
-import { ServerIconList } from '../../common/types';
+import type { ServerIconList } from '../../common/types';
 import { AppIconImage, getIconUrl } from '../server/api';
 import { searchIcon } from '../ChatListener/iconSearch';
 import { MAGIC_CHAR } from '../ChatListener/iconApply';
@@ -60,9 +62,9 @@ const IconSelector: React.FC = () => {
     const iconStyle = window.getComputedStyle(lastElementChild);
     const listContainerWidth = listRef.current.offsetWidth;
     const iconWidth =
-      parseFloat(iconStyle.width) +
-      parseFloat(iconStyle.marginLeft) +
-      parseFloat(iconStyle.marginRight);
+      Number.parseFloat(iconStyle.width) +
+      Number.parseFloat(iconStyle.marginLeft) +
+      Number.parseFloat(iconStyle.marginRight);
 
     return Math.floor(listContainerWidth / iconWidth);
   };
@@ -350,6 +352,7 @@ const IconSelector: React.FC = () => {
     }
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setActiveIconIndexList(defaultIconList.map((_, i) => i));
 
@@ -389,7 +392,7 @@ const IconSelector: React.FC = () => {
           window.iconttv.domSelector.chatInput
         ) as HTMLDivElement;
         if (!chatInput) return;
-        const prevValue = parseFloat(chatInput.style.paddingRight);
+        const prevValue = Number.parseFloat(chatInput.style.paddingRight);
         if (Number.isNaN(prevValue)) return;
         chatInput.style.paddingRight = `${prevValue + 1}rem`;
       });
@@ -451,11 +454,13 @@ const IconSelector: React.FC = () => {
         ref={listRef}
       >
         {defaultIconList.map((icon, idx) => (
+          // biome-ignore lint/a11y/useKeyWithMouseEvents: <explanation>
+          // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
           <img
             width={40}
             height={40}
             key={`${idx}-${icon.keywords[0]}`}
-            className={`iconttv-selector-item iconttv-common lazy`}
+            className={'iconttv-selector-item iconttv-common lazy'}
             src={`${getIconUrl(icon.thumbnailUri)}`}
             alt={`~${icon.keywords[0]}`}
             loading="lazy"

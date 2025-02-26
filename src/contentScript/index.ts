@@ -1,5 +1,3 @@
-'use strict';
-
 import Iconttv from './Iconttv';
 import { CHZZK_SELECTOR } from './constants/selector/chzzk';
 import { TWITCH_SELECTOR } from './constants/selector/twitch';

@@ -1,3 +1,4 @@
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export function assignDefaults<T>(target: Record<any, any>, defaults: T) {
   for (const key in defaults) {
     if (target[key] === undefined) {

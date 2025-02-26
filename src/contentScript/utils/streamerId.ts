@@ -5,7 +5,7 @@ export type ChzzkType = 'live' | 'popout';
  * 근데 지금 observer 쓰는 방식에서 중요한가?
  * @returns
  */
-function getTwitchType(href: string): TwitchType | void {
+function getTwitchType(href: string): TwitchType | undefined {
   if (href === 'https://www.twitch.tv/') return;
   const isVod = href.indexOf('/videos') !== -1;
   const isPopout = href.indexOf('/popout/') !== -1;

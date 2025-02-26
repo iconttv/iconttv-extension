@@ -25,12 +25,13 @@ export const ChatListenerEventTypes = {
 class ChatListener extends SafeEventEmitter {
   static #instance: ChatListener;
 
-  streamerId: string = '';
+  streamerId = '';
   status!: 'loading' | 'enabled' | 'disabled';
 
   constructor() {
     super();
 
+    // biome-ignore lint/correctness/noConstructorReturn: <explanation>
     if (ChatListener.#instance) return ChatListener.#instance;
     ChatListener.#instance = this;
 
@@ -125,7 +126,7 @@ class ChatListener extends SafeEventEmitter {
       }
     }
 
-    Array.from(messageBody.children).forEach((chatFragment) => {
+    for (const chatFragment of messageBody.children) {
       if (
         !chatFragment.matches(window.iconttv.domSelector.chatText) ||
         chatFragment.matches(window.iconttv.domSelector.chatThirdPartyEmote)
@@ -133,7 +134,7 @@ class ChatListener extends SafeEventEmitter {
         return;
 
       chatFragment.replaceWith(...replaceTextToElements(chatFragment));
-    });
+    }
   }
 }
 

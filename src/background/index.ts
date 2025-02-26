@@ -1,5 +1,3 @@
-'use strict';
-
 import Logger from '../Logger';
 import Browser = require('webextension-polyfill');
 

@@ -1,17 +1,13 @@
 // import Browser from 'webextension-polyfill';
-import {
-  Icon,
-  IconApplyOptions,
-  IconSize,
-  Keyword2Icon,
-  ServerIconList,
-} from '../common/types';
+import type { IconSize, Keyword2Icon, ServerIconList } from '../common/types';
 import { emptyIconListResponse } from './server/api';
 
 /**
  * 페이지 바뀌면 초기화되는
  * CacheStorage
  */
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 interface CacheStorage extends Record<string, any> {
   streamerId: string;
   chatInput: string;
@@ -61,7 +57,7 @@ class LocalStorage {
 
   browserKey = 'iconttv';
   browser!: {
-    get: (key: keyof BrowserStorage) => BrowserStorageValue | void;
+    get: (key: keyof BrowserStorage) => BrowserStorageValue | undefined;
     set: (
       key: keyof BrowserStorage,
       value: BrowserStorageValue
@@ -69,7 +65,7 @@ class LocalStorage {
   };
 
   cache!: {
-    get: (key: keyof CacheStorage) => CacheStorageValue | void;
+    get: (key: keyof CacheStorage) => CacheStorageValue | undefined;
     set: (
       key: keyof CacheStorage,
       value: CacheStorageValue
@@ -77,6 +73,7 @@ class LocalStorage {
   };
 
   constructor() {
+    // biome-ignore lint/correctness/noConstructorReturn: <explanation>
     if (LocalStorage.#instance) return LocalStorage.#instance;
     LocalStorage.#instance = this;
 

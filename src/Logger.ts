@@ -1,5 +1,3 @@
-'use strict';
-
 const PREFIX = '[iconttv]';
 
 const Logger = {

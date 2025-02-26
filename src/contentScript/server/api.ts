@@ -1,4 +1,4 @@
-import { ServerIconList } from '../../common/types';
+import type { ServerIconList } from '../../common/types';
 const VERSION = require('../../version.js');
 
 /**

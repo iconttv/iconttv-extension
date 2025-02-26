@@ -6,6 +6,7 @@ class URLObserver {
   callbacks!: (() => void)[];
 
   constructor() {
+    // biome-ignore lint/correctness/noConstructorReturn: <explanation>
     if (URLObserver.#instance) return URLObserver.#instance;
     URLObserver.#instance = this;
 

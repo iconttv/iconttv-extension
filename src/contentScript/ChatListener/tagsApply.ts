@@ -31,7 +31,7 @@ function replaceMarquee(options: MarqueeOptions) {
   if (body.length === 0) return '';
 
   if (Number(scrollamount.replace(/[^0-9]/g, '')) > 50) {
-    scrollamount = ` scrollamount=50`;
+    scrollamount = ' scrollamount=50';
   }
 
   return `<marquee ${direction} ${behavior} ${loop} ${scrollamount} ${scrolldelay} > ${body} </marquee>`;
@@ -59,24 +59,27 @@ export function escapeHTMLTags(text: string): string {
  */
 export function replaceStyleTags(text: string) {
   // 나무위키식
-  text = text.replace(/'''(.*)'''/gi, '<b>$1</b>');
-  text = text.replace(/''(.*)''/gi, '<i>$1</i>');
-  text = text.replace(/~~(.*)~~/gi, '<strike>$1</strike>');
-  text = text.replace(/--(.*)--/gi, '<strike>$1</strike>');
-  text = text.replace(/__(.*)__/gi, '<u>$1</u>');
+  let replacedText = text.replace(/'''(.*)'''/gi, '<b>$1</b>');
+  replacedText = replacedText.replace(/''(.*)''/gi, '<i>$1</i>');
+  replacedText = replacedText.replace(/~~(.*)~~/gi, '<strike>$1</strike>');
+  replacedText = replacedText.replace(/--(.*)--/gi, '<strike>$1</strike>');
+  replacedText = replacedText.replace(/__(.*)__/gi, '<u>$1</u>');
 
   //닫는 태그가 있는 [b][i][s]
-  text = text.replace(/\[b\](.*)\[\/b\]/gi, '<b>$1</b>'); //볼드 [b]blah
-  text = text.replace(/\[i\](.*)\[\/i\]/gi, '<i>$1</i>'); //이탤릭 [i]blah
-  text = text.replace(/\[s\](.*)\[\/s\]/gi, '<strike>$1</strike>'); //취소선 [s]blah
+  replacedText = replacedText.replace(/\[b\](.*)\[\/b\]/gi, '<b>$1</b>'); //볼드 [b]blah
+  replacedText = replacedText.replace(/\[i\](.*)\[\/i\]/gi, '<i>$1</i>'); //이탤릭 [i]blah
+  replacedText = replacedText.replace(
+    /\[s\](.*)\[\/s\]/gi,
+    '<strike>$1</strike>'
+  ); //취소선 [s]blah
 
   //닫는 태그가 없는 [b][i][s]
-  text = text.replace(/\[b\](.*)/gi, '<b>$1</b>'); //볼드 [b]blah
-  text = text.replace(/\[i\](.*)/gi, '<i>$1</i>'); //이탤릭 [i]blah
-  text = text.replace(/\[s\](.*)/gi, '<strike>$1</strike>'); //취소선 [s]blah
+  replacedText = replacedText.replace(/\[b\](.*)/gi, '<b>$1</b>'); //볼드 [b]blah
+  replacedText = replacedText.replace(/\[i\](.*)/gi, '<i>$1</i>'); //이탤릭 [i]blah
+  replacedText = replacedText.replace(/\[s\](.*)/gi, '<strike>$1</strike>'); //취소선 [s]blah
 
   //강제개행
-  text = text.replace(/\[br\]/gi, '<br/>');
+  replacedText = replacedText.replace(/\[br\]/gi, '<br/>');
 
   /**
    * [mq] marquee 태그
@@ -93,9 +96,9 @@ export function replaceStyleTags(text: string) {
    *  */
   const regex =
     /\[mq( direction=[^\ ]*)?( behavior=[^\ ]*)?( loop=[^\ ]*)?( scrollamount=[^\ ]*)?( scrolldelay=[^\ ]*)?\](.+)\[\/mq\]/gi;
-  const match = regex.exec(text);
+  const match = regex.exec(replacedText);
   if (match) {
-    text = replaceMarquee({
+    replacedText = replaceMarquee({
       direction: match[1],
       behavior: match[2],
       loop: match[3],
@@ -105,5 +108,5 @@ export function replaceStyleTags(text: string) {
     });
   }
 
-  return text;
+  return replacedText;
 }

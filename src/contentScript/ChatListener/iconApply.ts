@@ -1,5 +1,5 @@
 import Logger from '../../Logger';
-import { Icon, IconSize, Keyword2Icon } from '../../common/types';
+import type { Icon, IconSize, Keyword2Icon } from '../../common/types';
 import LocalStorage, { STORAGE_KEY } from '../LocalStorage';
 import { CLASSNAMES } from '../utils/classNames';
 import { escapeHTMLTags, replaceStyleTags } from './tagsApply';
@@ -40,9 +40,9 @@ export async function icon2element(icons: Icon[]): Promise<Keyword2Icon> {
        * 채팅창 렌더링 되는 이미지는 추가될 때
        * tippy 설정
        */
-      icon.keywords.forEach((keyword) => {
+      for (const keyword of icon.keywords) {
         keyword2icon[keyword.toLowerCase()] = iconImage;
-      });
+      }
 
       resolve(iconImage);
     });
@@ -161,20 +161,20 @@ export function replaceTextToElements(chatTextSpan: Element): Element[] {
               const icon = keyword2icon[rawKeyword];
 
               const image = icon.cloneNode() as HTMLImageElement;
-              image.onclick = function (event) {
+              image.onclick = (event) => {
                 event.stopPropagation();
                 ChatInputListener.appendInputValue(
                   (event?.target as HTMLImageElement).alt,
                   true
                 );
               };
-              image.onmouseover = function () {
+              image.onmouseover = () => {
                 addTippyTo(image, { placement: 'top-start' });
               };
-              image.onmouseout = function () {
+              image.onmouseout = () => {
                 destroyTippyFrom(image);
               };
-              image.onload = function () {
+              image.onload = () => {
                 /**
                  * 사용자가 의도적으로 스크롤을
                  * 올린 경우가 아니면

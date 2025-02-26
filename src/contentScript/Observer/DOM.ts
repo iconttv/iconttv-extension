@@ -1,5 +1,5 @@
 import Logger from '../../Logger';
-import { DOMSelectorValue } from '../constants/selector';
+import type { DOMSelectorValue } from '../constants/selector';
 
 class DOMObserver {
   static #instance: DOMObserver;
@@ -9,6 +9,7 @@ class DOMObserver {
   callbacks!: Partial<Record<DOMSelectorValue, ((node: Element) => void)[]>>;
 
   constructor() {
+    // biome-ignore lint/correctness/noConstructorReturn: <explanation>
     if (DOMObserver.#instance) return DOMObserver.#instance;
     DOMObserver.#instance = this;
 
@@ -25,22 +26,21 @@ class DOMObserver {
 
         for (const selectorString in this.callbacks) {
           const selector = <DOMSelectorValue>selectorString;
-          addedElements
-            .filter(
-              (element) => 'matches' in element && element.matches(selector)
-            )
-            .forEach((element) =>
-              this.callbacks[selector]?.map((cb) => cb(element))
-            );
+          const matchedElements = addedElements.filter(
+            (element) => 'matches' in element && element.matches(selector)
+          );
+          for (const element of matchedElements) {
+            this.callbacks[selector]?.map((cb) => cb(element));
+          }
 
           if ('matches' in targetElement && targetElement.matches(selector)) {
             this.callbacks[selector]?.map((cb) => cb(targetElement));
           }
 
           const children = targetElement.querySelectorAll(selector);
-          children.forEach((child) => {
+          for (const child of children) {
             this.callbacks[selector]?.map((cb) => cb(child));
-          });
+          }
         }
       }
     });
@@ -61,11 +61,11 @@ class DOMObserver {
   }
 
   activate() {
-    Logger.debug(`observer enabled`);
+    Logger.debug('observer enabled');
     this.isActivate = true;
   }
   deactivate() {
-    Logger.debug(`observer disabled`);
+    Logger.debug('observer disabled');
     this.isActivate = false;
   }
 }

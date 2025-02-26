@@ -1,4 +1,4 @@
-import { DOMSelector } from '.';
+import type { DOMSelector } from '.';
 
 export const CHZZK_SELECTOR: DOMSelector = {
   // chatLineMessage: `.chat-line__message`,
@@ -12,14 +12,14 @@ export const CHZZK_SELECTOR: DOMSelector = {
 
   ///// TODO below
 
-  chatThirdPartyEmote: `.bttv-emote, .seventv-emote-box`,
+  chatThirdPartyEmote: ".bttv-emote, .seventv-emote-box",
 
   chatButtonContainer: `[data-test-selector="chat-input-buttons-container"]`,
   chatSettingButton: `[data-a-target="chat-settings"]`,
   chatSettingContainer: `[data-a-target="chat-settings-balloon"] [data-a-target="chat-settings-mod-view"]`,
   chatSettingContainerSeperator: `[role="separator"]`,
 
-  iconSelectorParent: `.rich-input-container`,
+  iconSelectorParent: ".rich-input-container",
 
   /** parentElement로 상위 컨테이너 가져와야 함 */
   defaultEmotePicker: `[data-a-target="emote-picker-button"]`,

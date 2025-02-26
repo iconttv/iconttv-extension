@@ -1,6 +1,4 @@
-import Iconttv from '../contentScript/Iconttv';
-
-export {};
+import type Iconttv from '../contentScript/Iconttv';
 
 /**
  * specify type for autocomplete variables in development.

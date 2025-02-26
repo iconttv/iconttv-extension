@@ -3,7 +3,7 @@ import DOMObserver from './Observer/DOM';
 import URLObserver from './Observer/URL';
 import ChatListener, { ChatListenerEventTypes } from './ChatListener';
 import { mountSettings } from './components/Settings';
-import { DOMSelector } from './constants/selector';
+import type { DOMSelector } from './constants/selector';
 
 type StreamPlatform = 'twitch' | 'chzzk';
 
@@ -18,6 +18,7 @@ class Iconttv {
 
     if (window.iconttv) {
       Logger.timeEnd('Iconttv Init');
+      // biome-ignore lint/correctness/noConstructorReturn: <explanation>
       return window.iconttv;
     }
     window.iconttv = this;

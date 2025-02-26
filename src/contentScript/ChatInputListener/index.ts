@@ -10,12 +10,15 @@ export const ChatInputListenerEventTypes = {
 class ChatInputListener extends SafeEventEmitter {
   static #instance: ChatInputListener;
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   inputComponent: any;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   editorComponent: any;
 
   constructor() {
     super();
 
+    // biome-ignore lint/correctness/noConstructorReturn: <explanation>
     if (ChatInputListener.#instance) return ChatInputListener.#instance;
     ChatInputListener.#instance = this;
 
@@ -33,6 +36,7 @@ class ChatInputListener extends SafeEventEmitter {
 
     for (const key in element) {
       if (key.startsWith('__reactInternalInstance')) {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         return (element as any)[key];
       }
     }
@@ -41,6 +45,7 @@ class ChatInputListener extends SafeEventEmitter {
 
   __getReactComponent(
     selector: string,
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     condition: (a: any) => boolean,
     maxDepth = 20
   ) {

@@ -1,4 +1,4 @@
-import tippy, { Props, hideAll } from 'tippy.js';
+import tippy, { type Props, hideAll } from 'tippy.js';
 
 export async function waitFor<T>(callback: () => T, timeout = -1): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -20,7 +20,8 @@ export async function waitFor<T>(callback: () => T, timeout = -1): Promise<T> {
 }
 
 export function destroyTippyFrom(element: Element) {
-  (element as any)._tippy && (element as any)._tippy.destroy();
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  (element as any)._tippy?.destroy();
 }
 
 export const hideAllTippy = hideAll;

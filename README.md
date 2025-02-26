@@ -4,6 +4,12 @@ Iconttv browser extension source code
 
 구 twitch-icon-selector
 
+## 개발 관련
+
+- `npm run dev` 개발 환경으로 build 폴더에 프로그램 빌드
+- `npm run build` 프로덕션션 환경으로 build 폴더에 프로그램 빌드
+- `npm run pack` 프로덕션션 환경으로 스토어에 업로드 가능한 zip 파일 생성
+
 ## 개발 일정
 
 - 2024.02.27
@@ -15,12 +21,15 @@ Iconttv browser extension source code
 - [ ] 정사각형 이미지가 아닌 경우에도 정사각형으로 표시되는 문제
 - [ ] 치지직 아이콘 선택기 사용 안됨
 
-
 ## Install
 
 [**Chromium** extension](https://chrome.google.com/webstore/detail/iconttv/jgpcibjnfdgbllfghmaamafafgkadhpf)
 
 [**Firefox** extension](https://addons.mozilla.org/en-US/firefox/addon/%ED%8A%B8%EC%9C%84%EC%B9%98-%EC%BB%A4%EC%8A%A4%ED%85%80-%EC%95%84%EC%9D%B4%EC%BD%98-%EC%84%A0%ED%83%9D%EA%B8%B0/)
+
+## 2.1.1
+
+- [치지직](https://chzzk.naver.com/) 이미지 치환 문제 해결결
 
 ## 2.1.0
 

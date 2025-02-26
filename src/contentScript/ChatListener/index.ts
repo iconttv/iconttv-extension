@@ -131,7 +131,7 @@ class ChatListener extends SafeEventEmitter {
         !chatFragment.matches(window.iconttv.domSelector.chatText) ||
         chatFragment.matches(window.iconttv.domSelector.chatThirdPartyEmote)
       )
-        return;
+        continue;
 
       chatFragment.replaceWith(...replaceTextToElements(chatFragment));
     }

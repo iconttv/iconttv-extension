@@ -29,7 +29,7 @@ Iconttv browser extension source code
 
 ## 2.1.1
 
-- [치지직](https://chzzk.naver.com/) 이미지 치환 문제 해결결
+- [치지직](https://chzzk.naver.com/) 이미지 치환 문제 해결
 
 ## 2.1.0
 

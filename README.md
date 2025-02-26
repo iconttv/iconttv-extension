@@ -8,7 +8,7 @@ Iconttv browser extension source code
 
 - `npm run dev` 개발 환경으로 build 폴더에 프로그램 빌드
 - `npm run build` 프로덕션션 환경으로 build 폴더에 프로그램 빌드
-- `npm run pack` 프로덕션션 환경으로 스토어에 업로드 가능한 zip 파일 생성
+- `npm run pack` 프로덕션션 환경으로 스토어에 업로드 가능한 zip 파일 생성 (release 폴더에 자동 생성)
 
 ## 개발 일정
 
